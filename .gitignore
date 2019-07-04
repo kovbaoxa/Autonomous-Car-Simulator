@@ -1,2 +1,4 @@
 __pycache__/*
 test.py
+.vscode/settings.json
+gym_autonmscar.egg-info/*
