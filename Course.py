@@ -1,6 +1,8 @@
 from Wall import WallSprite
 from Car import CarSprite
 from Trophy import TrophySprite
+from Parking import Parking
+from Crosswalk import Crosswalk
 
 Map1 = (
     [
@@ -17,14 +19,23 @@ Map1 = (
         WallSprite((113 * 7, 768 - 130), 5, 260),
         WallSprite((113 * 8, 768 - 230), 5, 260),
         WallSprite((113 * 4, 768 - 360), 113 * 8, 5),
-        WallSprite((1024 - 113 * 4, 768 - 490), 113 * 8, 5),
+        WallSprite((1024 - 113 * 3.5, 768 - 490), 113 * 7, 5),
+        WallSprite((1024 - 113 * 7, 768 - 550), 113 * 2, 5),
         WallSprite((1024 - 113 * 4, 130), 113 * 8, 5),
+        WallSprite((1024 - 113 * 6, 768 - 520), 5, 60),
         WallSprite((120, 204), 5, 152),
     ],
     [
         TrophySprite((950, 45))
     ],
-    CarSprite('images/car.png', (50, 700))
+    [
+        Parking((1024 - 113 * 7 - 1, 222.5), 113, 53),
+    ],
+    [
+        Crosswalk((56, 600), 112, 5),
+        Crosswalk((400, 345), 5, 130, interval=15),
+    ],
+    CarSprite('images/car.png', (50, 700)),
 )
 
 Map2 = (

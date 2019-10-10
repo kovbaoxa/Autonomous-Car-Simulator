@@ -8,12 +8,20 @@ import pygame
 import math
 import copy
 import numpy as np
+import time
 
 
 class Game:
-    def __init__(self, walls, trophies, car, database):
+    def __init__(self, walls, trophies, parkings, crosswalks, car, database):
         self.init_args =\
-            [copy.copy(walls), copy.copy(trophies), copy.copy(car), database]
+            [
+                copy.copy(walls),
+                copy.copy(trophies),
+                copy.copy(parkings),
+                copy.copy(crosswalks),
+                copy.copy(car),
+                database
+            ]
         pygame.init()
         self.car = car
         self.screen = pygame.display.set_mode((1024, 768))
@@ -25,9 +33,12 @@ class Game:
         self.loss_text = font.render('', True, (255, 0, 0))
         self.wall_group = pygame.sprite.RenderPlain(*walls)
         self.trophy_group = pygame.sprite.RenderPlain(*trophies)
+        self.crosswalk_group = pygame.sprite.RenderPlain(*crosswalks)
         self.car_group = pygame.sprite.RenderPlain(car)
+        self.parkings = parkings
         self.rect = self.screen.get_rect()
         self.stop = False
+        self.car_update = True
         self.database = database
 
     def run(self, auto=False):
@@ -76,13 +87,15 @@ class Game:
                     elif self.win_condition is True and event.key == K_SPACE:
                         print(result)
                         self.database.stop = True
+                        time.sleep(0.1)
                     elif self.win_condition is False and event.key == K_SPACE:
                         print(result)
-                        # self.again(auto=auto)
+                        time.sleep(0.1)
                         self.database.stop = True
                     elif event.key == K_ESCAPE:
                         self.database.stop = True
                         print(result)
+                        time.sleep(0.1)
                 else:
                     if not hasattr(event, 'key'):
                         continue
@@ -100,13 +113,16 @@ class Game:
                             self.database.stop = True
                     elif self.win_condition is True and event.key == K_SPACE:
                         print(result)
+                        time.sleep(0.1)
                         self.database.stop = True
                     elif self.win_condition is False and event.key == K_SPACE:
                         print(result)
+                        time.sleep(0.1)
                         self.database.stop = True
 
                     elif event.key == K_ESCAPE:
                         print(result)
+                        time.sleep(0.1)
                         self.database.stop = True
 
             if self.database.stop:
@@ -114,10 +130,12 @@ class Game:
 
             # RENDERING
             self.screen.fill((0, 0, 0))
-            self.car_group.update(deltat)
+            if self.car_update:
+                self.car_group.update(deltat)
             collisions = pygame.sprite.groupcollide(
                 self.car_group, self.wall_group, False, False, collided=None)
             if collisions != {}:
+                self.car_update = False
                 self.win_condition = False
                 self.car.image = pygame.image.load('images/collision.png')
                 self.car.MAX_FORWARD_SPEED = 0
@@ -125,31 +143,59 @@ class Game:
                 self.car.k_right = 0
                 self.car.k_left = 0
 
+            crosswalk_collisions = pygame.sprite.groupcollide(
+                    self.car_group,
+                    self.crosswalk_group,
+                    False,
+                    False,
+                    collided=None
+                )
+
             trophy_collision = pygame.sprite.groupcollide(
                     self.car_group,
                     self.trophy_group,
                     False,
                     True
                 )
+
+            for colled_crosswalk in crosswalk_collisions.values():
+                if colled_crosswalk[0].color == "red":
+                    self.car_update = False
+                    self.win_condition = False
+                    self.car.image = pygame.image.load('images/collision.png')
+                    self.car.MAX_FORWARD_SPEED = 0
+                    self.car.MAX_REVERSE_SPEED = 0
+                    self.car.k_right = 0
+                    self.car.k_left = 0
+
             if trophy_collision != {}:
-                self.win_condition = True
+                all_parking_done = True
+                for parking in self.parkings:
+                    if not parking.mission_complete:
+                        all_parking_done = False
+                        break
+
+                if all_parking_done:
+                    self.car_update = False
+                    self.win_condition = True
+                else:
+                    self.car_update = False
+                    self.win_condition = False
                 self.car.MAX_FORWARD_SPEED = 0
                 self.car.MAX_REVERSE_SPEED = 0
-                self.win_text = self.win_font.render(
-                        'Press Space to Advance',
-                        True,
-                        (0, 255, 0)
-                    )
                 if self.win_condition is True:
                     self.car.k_right = -5
+            for parking in self.parkings:
+                parking.update(self.car)
+                parking.draw(self.screen)
 
-            self.wall_group.update(collisions)
+            self.wall_group.update()
+            self.crosswalk_group.update()
+            self.crosswalk_group.draw(self.screen)
             self.wall_group.draw(self.screen)
             self.car_group.draw(self.screen)
             self.trophy_group.draw(self.screen)
             # Counter Render
-            self.screen.blit(self.win_text, (250, 700))
-            self.screen.blit(self.loss_text, (250, 700))
             pygame.display.flip()
             self.make_lidar_data()
 
