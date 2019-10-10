@@ -77,6 +77,12 @@ if __name__ == "__main__":
         font = pygame.font.Font('freesansbold.ttf', 50)
         text = font.render("P", 1, (255, 255, 255))
         textpos = text.get_rect()
-        screen.blit(text, [250 - textpos[2] / 2, 300 - textpos[3] / 2, textpos[2], textpos[3]])
+        screen.blit(
+            text,
+            [250 - textpos[2] / 2,
+             300 - textpos[3] / 2,
+             textpos[2],
+             textpos[3]]
+            )
 
         pygame.display.flip()

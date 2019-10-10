@@ -6,6 +6,6 @@ class Parking(V2X):
         V2X.__init__(self, position, name="Parking")
         self.mission_compelte = False
         self.time_left = stay_time
-    
+
     def update():
         pass

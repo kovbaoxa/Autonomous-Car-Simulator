@@ -19,10 +19,10 @@ Map1 = (
         WallSprite((113 * 4, 768 - 360), 113 * 8, 5),
         WallSprite((1024 - 113 * 4, 768 - 490), 113 * 8, 5),
         WallSprite((1024 - 113 * 4, 130), 113 * 8, 5),
-        WallSprite((120 , 204), 5, 152),
+        WallSprite((120, 204), 5, 152),
     ],
     [
-        TrophySprite((950,45))
+        TrophySprite((950, 45))
     ],
     CarSprite('images/car.png', (50, 700))
 )
@@ -50,7 +50,7 @@ Map2 = (
         WallSprite((900, 468), 5, 600),
     ],
     [
-        TrophySprite((950,720))
+        TrophySprite((950, 720))
     ],
     CarSprite('images/car.png', (50, 700))
 )
@@ -132,7 +132,7 @@ Map3 = (
         WallSprite((0 + 1040, 768), 30, 290 + 100),
     ],
     [
-        TrophySprite((980,400))
+        TrophySprite((980, 400))
     ],
     CarSprite('images/car.png', (30, 570), -20)
 )
