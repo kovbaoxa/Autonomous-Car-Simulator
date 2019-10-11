@@ -16,6 +16,12 @@ class Parking(V2X):
         self.width = width
         self.height = height
 
+        self.data = [
+                self.name, self.position,
+                self.width, self.height,
+                self.mission_complete, self.time_left
+            ]
+
     def update(self, car: CarSprite):
         left, top, width, height = car.rect
         p0 = (left, top)
@@ -37,6 +43,12 @@ class Parking(V2X):
                 self.stay_time = -1
         else:
             self.time_left = self.stay_time
+
+        self.data = [
+            self.name, self.position,
+            self.width, self.height,
+            self.mission_complete, self.time_left
+        ]
 
     def draw(self, screen):
         x, y = self.position

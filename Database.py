@@ -4,3 +4,4 @@ class Database:
         self.control = control
         self.car = car
         self.stop = False
+        self.v2x_data = dict()

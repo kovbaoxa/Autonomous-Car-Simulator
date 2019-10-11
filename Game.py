@@ -44,6 +44,7 @@ class Game:
     def run(self, auto=False):
         seconds = 0
         record = False
+        temp_v2x_data = []
         while True:
             deltat = self.clock.tick(30)
             seconds += 0.03
@@ -185,13 +186,26 @@ class Game:
                 self.car.MAX_REVERSE_SPEED = 0
                 if self.win_condition is True:
                     self.car.k_right = -5
+
+            temp_v2x_data.clear()
             for parking in self.parkings:
                 parking.update(self.car)
                 parking.draw(self.screen)
+                if parking.is_in_range(self.car):
+                    temp_v2x_data.append((id(parking), parking.data))
 
             self.wall_group.update()
             self.crosswalk_group.update()
             self.crosswalk_group.draw(self.screen)
+            for crosswalk in self.crosswalk_group:
+                if crosswalk.is_in_range(self.car):
+                    temp_v2x_data.append((id(crosswalk), crosswalk.data))
+            new_dict = dict()
+            for v2x_data in temp_v2x_data:
+                key, value = v2x_data
+                new_dict[key] = value
+            self.database.v2x_data = new_dict
+            print(self.database.v2x_data)
             self.wall_group.draw(self.screen)
             self.car_group.draw(self.screen)
             self.trophy_group.draw(self.screen)
