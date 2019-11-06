@@ -205,7 +205,7 @@ class Game:
                 key, value = v2x_data
                 new_dict[key] = value
             self.database.v2x_data = new_dict
-            print(self.database.v2x_data)
+            # print(self.database.v2x_data)
             self.wall_group.draw(self.screen)
             self.car_group.draw(self.screen)
             self.trophy_group.draw(self.screen)
@@ -265,6 +265,11 @@ class Game:
                 while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
                     x -= 1
                     y = y
+                    try:
+                        if (array[int(x)][int(y)] == 255).all():
+                            break
+                    except IndexError:
+                        break
             elif (135 <= direction < 180) or (180 < direction < 225):
                 while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
                     y += 1
@@ -311,6 +316,9 @@ class Game:
 
             lidar_data[direction] = length
 
+        lidar_data = np.concatenate((lidar_data[-90:], lidar_data[:270]), axis=None)
+        lidar_data = np.concatenate((lidar_data, lidar_data), axis=None)
+        lidar_data = lidar_data[self.car.direction % 360: self.car.direction % 360 + 180]
         self.database.lidar.data = lidar_data
 
 
