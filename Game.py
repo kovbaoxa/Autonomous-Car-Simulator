@@ -24,7 +24,7 @@ class Game:
             ]
         pygame.init()
         self.car = car
-        self.screen = pygame.display.set_mode((1024, 768))
+        self.screen = pygame.display.set_mode((1000, 800))
         self.clock = pygame.time.Clock()
         font = pygame.font.Font(None, 75)
         self.win_font = pygame.font.Font(None, 50)

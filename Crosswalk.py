@@ -8,7 +8,7 @@ from V2X import V2X
 class Crosswalk(V2X, pygame.sprite.Sprite):
     hit = pygame.image.load('images/collision.png')
 
-    def __init__(self, position, width, height, interval=10):
+    def __init__(self, position, width, height, interval=20, phase=0):
         V2X.__init__(self, position, name="Crosswalk")
         pygame.sprite.Sprite.__init__(self)
         red_wall = [255, 0, 0] * np.ones((width, height, 3))
@@ -19,7 +19,7 @@ class Crosswalk(V2X, pygame.sprite.Sprite):
         self.width = width
         self.height = height
         self.position = position
-        self.time_left = interval
+        self.time_left = interval + phase
         self.interval = interval
         self.color = "red"
         self.data =\

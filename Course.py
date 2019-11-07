@@ -6,64 +6,67 @@ from Crosswalk import Crosswalk
 
 Map1 = (
     [
-        WallSprite((512, 2.5), 1024, 5),
-        WallSprite((512, 765.5), 1024, 5),
-        WallSprite((2.5, 384), 5, 768),
-        WallSprite((1021.5, 512), 5, 768),
-        WallSprite((113 * 1, 768 - 130), 5, 260),
-        WallSprite((113 * 2, 768 - 230), 5, 260),
-        WallSprite((113 * 3, 768 - 130), 5, 260),
-        WallSprite((113 * 4, 768 - 230), 5, 260),
-        WallSprite((113 * 5, 768 - 130), 5, 260),
-        WallSprite((113 * 6, 768 - 230), 5, 260),
-        WallSprite((113 * 7, 768 - 130), 5, 260),
-        WallSprite((113 * 8, 768 - 230), 5, 260),
-        WallSprite((113 * 4, 768 - 360), 113 * 8, 5),
-        WallSprite((1024 - 113 * 3.5, 768 - 490), 113 * 7, 5),
-        WallSprite((1024 - 113 * 7, 768 - 550), 113 * 2, 5),
-        WallSprite((1024 - 113 * 4, 130), 113 * 8, 5),
-        WallSprite((1024 - 113 * 6, 768 - 520), 5, 60),
-        WallSprite((120, 204), 5, 152),
+        WallSprite((500, 0), 1000, 4),
+        WallSprite((500, 800), 1000, 4),
+        WallSprite((0, 400), 4, 800),
+        WallSprite((1000, 400), 4, 800),
+        WallSprite((400, 400), 4, 800),
+        WallSprite((600, 400), 4, 800),
+        WallSprite((540, 650), 120, 4),
+        WallSprite((540, 450), 120, 4),
+        WallSprite((540, 300), 120, 4),
+        WallSprite((540, 100), 120, 4),
+        WallSprite((460, 200), 120, 4),
+        WallSprite((460, 375), 120, 4),
+        WallSprite((460, 550), 120, 4),
     ],
     [
-        TrophySprite((950, 45))
+        TrophySprite((500, 40))
     ],
     [
-        Parking((1024 - 113 * 7 - 1, 222.5), 113, 53),
+
     ],
     [
-        Crosswalk((56, 600), 112, 5),
-        Crosswalk((400, 345), 5, 130, interval=15),
+
     ],
-    CarSprite('images/car.png', (50, 700)),
+    CarSprite('images/car.png', (500, 760)),
 )
 
 Map2 = (
     [
-        WallSprite((512, 2.5), 1024, 5),
-        WallSprite((400, 765.5), 1024, 5),
-        WallSprite((2.5, 384), 5, 768),
-        WallSprite((1021.5, 384), 5, 768),
-        WallSprite((100, 468), 5, 600),
-        WallSprite((150, 168), 100, 5),
-        WallSprite((150, 468), 100, 5),
-        WallSprite((300, 300), 5, 600),
-        WallSprite((300, 350), 200, 5),
-        WallSprite((300, 600), 200, 5),
-        WallSprite((500, 468), 5, 600),
-        WallSprite((500, 168), 200, 5),
-        WallSprite((500, 468), 200, 5),
-        WallSprite((700, 300), 5, 600),
-        WallSprite((700, 350), 200, 5),
-        WallSprite((700, 600), 200, 5),
-        WallSprite((850, 168), 100, 5),
-        WallSprite((850, 468), 100, 5),
-        WallSprite((900, 468), 5, 600),
+        WallSprite((500, 0), 1000, 4),
+        WallSprite((500, 800), 1000, 4),
+        WallSprite((0, 400), 4, 800),
+        WallSprite((1000, 400), 4, 800),
+        WallSprite((120, 450), 4, 700),
+        WallSprite((360, 450), 4, 700),
+        WallSprite((600, 450), 4, 700),
+        WallSprite((840, 450), 4, 700),
+        WallSprite((920, 100), 160, 4),
+        WallSprite((240, 350), 4, 700),
+        WallSprite((480, 350), 4, 700),
+        WallSprite((720, 350), 4, 700),
     ],
     [
-        TrophySprite((950, 720))
+        TrophySprite((950, 40))
     ],
-    CarSprite('images/car.png', (50, 700))
+    [
+
+    ],
+    [
+        Crosswalk((60, 400), 120, 4, interval=40, phase=0),
+        Crosswalk((180, 300), 120, 4, interval=30, phase=5),
+        Crosswalk((180, 500), 120, 4, interval=30, phase=15),
+        Crosswalk((300, 200), 120, 4, interval=20, phase=30),
+        Crosswalk((300, 600), 120, 4, interval=20, phase=40),
+        Crosswalk((420, 400), 120, 4, interval=40, phase=55),
+        Crosswalk((540, 600), 120, 4, interval=20, phase=65),
+        Crosswalk((540, 200), 120, 4, interval=20, phase=80),
+        Crosswalk((660, 300), 120, 4, interval=30, phase=70),
+        Crosswalk((660, 500), 120, 4, interval=30, phase=85),
+        Crosswalk((780, 400), 120, 4, interval=40, phase=95),
+    ],
+    CarSprite('images/car.png', (60, 750)),
 )
 
 Map3 = (
