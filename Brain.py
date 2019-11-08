@@ -34,11 +34,14 @@ class Brain:
                 self.left(num)
 
                 ☆☆☆☆☆ In one loop,
-                you can only change the speed up to 3 and the angle up to 5!!
+                you can only change the speed up to 5 and the angle up to 8!!
 
             3. How can i get a car status data?
                 self.database.car.direction
                 self.database.car.speed
+
+            4. How can i get a v2x data?
+                self.database.v2x_data
             '''
 
             # Implement Your Algorithm HERE!!
@@ -48,7 +51,7 @@ class Brain:
 
             if self.database.car.speed <= 2:
                 self.up()
-            elif self.database.car.speed > 2:
+            elif self.database.car.speed > 3:
                 self.down()
 
     def up(self, num: int = 1):
