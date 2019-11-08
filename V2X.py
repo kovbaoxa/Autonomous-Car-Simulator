@@ -3,7 +3,7 @@ import numpy as np
 
 
 class V2X:
-    MAX_DISTANCE = 300
+    MAX_DISTANCE = 400
 
     def __init__(self, position, name="V2X"):
         self.name = name
