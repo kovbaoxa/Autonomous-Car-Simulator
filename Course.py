@@ -3,6 +3,9 @@ from Car import CarSprite
 from Trophy import TrophySprite
 from Parking import Parking
 from Crosswalk import Crosswalk
+from TrafficSign import Right, Left
+
+import numpy as np
 
 Map1 = (
     [
@@ -22,6 +25,9 @@ Map1 = (
     ],
     [
         TrophySprite((540, 12))
+    ],
+    [
+
     ],
     [
 
@@ -66,6 +72,9 @@ Map2 = (
         Crosswalk((660, 500), 120, 4, interval=30, phase=85),
         Crosswalk((780, 400), 120, 4, interval=40, phase=95),
     ],
+    [
+
+    ],
     CarSprite('images/car.png', (60, 750)),
 )
 
@@ -103,6 +112,58 @@ Map3 = (
     ],
     [
 
+    ],
+    [
+
+    ],
+    CarSprite('images/car.png', (500, 760)),
+)
+
+Map4 = (
+    [
+        WallSprite((500, 0), 1000, 4),
+        WallSprite((500, 800), 1000, 4),
+        WallSprite((0, 400), 4, 800),
+        WallSprite((1000, 400), 4, 800),
+        WallSprite((560, 750), 4, 100),
+        WallSprite((440, 750), 4, 100),
+        WallSprite((500, 600), 800, 4),
+        WallSprite((220, 700), 440, 4),
+        WallSprite((780, 700), 440, 4),
+        WallSprite((100, 350), 4, 500),
+        WallSprite((200, 250), 4, 500),
+        WallSprite((300, 350), 4, 500),
+        WallSprite((900, 350), 4, 500),
+        WallSprite((800, 250), 4, 500),
+        WallSprite((700, 350), 4, 500),
+        WallSprite((500, 100), 400, 4),
+        WallSprite((500, 540), 60, 4),
+        WallSprite((530, 570), 4, 60),
+        WallSprite((470, 570), 4, 60),
+    ],
+    [
+        TrophySprite((465, 15))
+    ],
+    [
+
+    ],
+    [
+        Crosswalk((50, 500), 100, 4, interval=30, phase=0),
+        Crosswalk((50, 400), 100, 4, interval=30, phase=8),
+        Crosswalk((50, 300), 100, 4, interval=30, phase=16),
+        Crosswalk((50, 200), 100, 4, interval=30, phase=24),
+        Crosswalk((250, 400), 100, 4, interval=35, phase=0),
+        Crosswalk((250, 200), 100, 4, interval=35, phase=20),
+        Crosswalk((950, 500), 100, 4, interval=30, phase=0),
+        Crosswalk((950, 400), 100, 4, interval=30, phase=8),
+        Crosswalk((950, 300), 100, 4, interval=30, phase=16),
+        Crosswalk((950, 200), 100, 4, interval=30, phase=24),
+        Crosswalk((750, 400), 100, 4, interval=35, phase=0),
+        Crosswalk((750, 200), 100, 4, interval=35, phase=20),
+    ],
+    [
+        Left((470, 540), 60, 60) if (np.random.random() < 0.5)
+        else Right((470, 540), 60, 60)
     ],
     CarSprite('images/car.png', (500, 760)),
 )
