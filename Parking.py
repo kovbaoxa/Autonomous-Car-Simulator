@@ -62,7 +62,7 @@ class Parking(V2X):
 
             font_size = int((self.width + self.height) / 6)
             font = pygame.font.Font('freesansbold.ttf', font_size)
-            text = font.render("P", 1, (255, 255, 255))
+            text = font.render("P", 1, (250, 250, 250))
             textpos = text.get_rect()
             screen.blit(
                     text,
