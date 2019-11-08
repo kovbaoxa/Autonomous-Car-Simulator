@@ -75,16 +75,16 @@ class Game:
                         continue
                     if self.win_condition is None:
                         if event.key == K_RIGHT:
-                            if self.car.k_right > -5:
+                            if self.car.k_right > -8:
                                 self.car.k_right += -1
                         elif event.key == K_LEFT:
-                            if self.car.k_left < 5:
+                            if self.car.k_left < 8:
                                 self.car.k_left += 1
                         elif event.key == K_UP:
-                            if self.car.k_up < 3:
+                            if self.car.k_up < 5:
                                 self.car.k_up += 1
                         elif event.key == K_DOWN:
-                            if self.car.k_down > -3:
+                            if self.car.k_down > -5:
                                 self.car.k_down += -1
                         elif event.key == K_ESCAPE:
                             self.database.stop = True

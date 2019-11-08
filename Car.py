@@ -8,8 +8,8 @@ from Authority import AuthorityExecption
 
 
 class CarSprite(pygame.sprite.Sprite):
-    __MAX_FORWARD_SPEED = 10
-    __MAX_REVERSE_SPEED = 10
+    __MAX_FORWARD_SPEED = 15
+    __MAX_REVERSE_SPEED = 15
 
     def __init__(self, image, position, direction=0):
         pygame.sprite.Sprite.__init__(self)
