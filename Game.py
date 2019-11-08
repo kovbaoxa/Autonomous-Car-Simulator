@@ -178,7 +178,7 @@ class Game:
                     if not parking.mission_complete:
                         all_parking_done = False
                         break
-                
+
                 if all_parking_done:
                     self.car_update = False
                     self.win_condition = True
