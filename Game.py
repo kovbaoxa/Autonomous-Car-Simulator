@@ -1,14 +1,15 @@
-from pygame.locals import USEREVENT, K_RIGHT, K_LEFT, K_UP, K_DOWN, K_ESCAPE,\
-    K_SPACE, KEYDOWN
-from Trophy import TrophySprite
-from Car import CarSprite
-from Wall import WallSprite
-
-import pygame
-import math
 import copy
-import numpy as np
+import math
 import time
+
+import numpy as np
+import pygame
+from pygame.locals import (K_DOWN, K_ESCAPE, K_LEFT, K_RIGHT, K_SPACE, K_UP,
+                           KEYDOWN, USEREVENT)
+
+from Car import CarSprite
+from Trophy import TrophySprite
+from Wall import WallSprite
 
 
 class Game:
@@ -211,6 +212,7 @@ class Game:
             self.trophy_group.draw(self.screen)
             # Counter Render
             pygame.display.flip()
+
             self.make_lidar_data()
 
     def again(self, auto):
@@ -289,17 +291,16 @@ class Game:
                     except IndexError:
                         break
             elif (225 <= direction < 270) or (270 < direction < 315):
-                while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L)\
-                     and (array[int(x)][int(y)] != 255).any():
+                while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
                     x += 1
                     y = (1 / m) * (x - lidar_x) + lidar_y
                     try:
-                        array[int(x)][int(y)]
+                        if (array[int(x)][int(y)] == 255).all():
+                            break
                     except IndexError:
                         break
             elif direction == 270:
-                while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L)\
-                     and (array[int(x)][int(y)] != 255).any():
+                while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
                     x += 1
                     y = y
                     try:
@@ -316,9 +317,15 @@ class Game:
 
             lidar_data[direction] = length
 
-        lidar_data = np.concatenate((lidar_data[-90:], lidar_data[:270]), axis=None)
-        lidar_data = np.concatenate((lidar_data, lidar_data), axis=None)
-        lidar_data = lidar_data[self.car.direction % 360: self.car.direction % 360 + 180]
+        lidar_data = np.concatenate(
+            (lidar_data[-90:], lidar_data[:270]), axis=None
+            )
+        lidar_data = np.concatenate(
+            (lidar_data, lidar_data), axis=None
+            )
+        lidar_data =\
+            lidar_data[self.car.direction % 360:
+                       self.car.direction % 360 + 180]
         self.database.lidar.data = lidar_data
 
 
