@@ -24,7 +24,7 @@ class Crosswalk(V2X, pygame.sprite.Sprite):
         self.color = "red"
         self.data =\
             [self.name, self.color, self.position,
-             self.width, self.height, self.time_left]
+             self.width, self.height, self.time_left, self.interval]
 
     def update(self):
         self.time_left -= 1
@@ -47,7 +47,7 @@ class Crosswalk(V2X, pygame.sprite.Sprite):
 
         self.data = \
             [self.name, self.color, self.position,
-             self.width, self.height, self.time_left]
+             self.width, self.height, self.time_left, self.interval]
 
 
 if __name__ == "__main__":
