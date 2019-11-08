@@ -1,21 +1,21 @@
-import pygame
-import threading
 import argparse
 import os
+import threading
 
+import pygame
 
-from Game import Game
-from LiDAR import LiDAR
 from Brain import Brain
 from Control import Control
-from Database import Database
 from Course import Map1, Map2, Map3
+from Database import Database
+from Game import Game
+from LiDAR import LiDAR
 
 
 def main(auto):
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (500, 30)
     _ = (Map1, Map2, Map3)
-    walls, trophies, parkings, crosswalks, car = Map1
+    walls, trophies, parkings, crosswalks, car = Map3
     lidar = LiDAR()
     control = Control()
     database = Database(lidar, control, car)
