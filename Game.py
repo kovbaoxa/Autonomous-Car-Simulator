@@ -13,21 +13,17 @@ from Wall import WallSprite
 
 
 class Game:
-    def __init__(self, walls, trophies, parkings,
-                 crosswalks, traffic_signs, car, database):
+    def __init__(self, walls, trophies, 
+                 car, database):
         self.init_args =\
             [
                 copy.copy(walls),
-                copy.copy(trophies),
-                copy.copy(parkings),
-                copy.copy(crosswalks),
                 copy.copy(car),
                 database
             ]
         pygame.init()
         self.car = car
         self.screen = pygame.display.set_mode((1000, 800))
-        self.traffic_signs = traffic_signs
         self.clock = pygame.time.Clock()
         font = pygame.font.Font(None, 75)
         self.win_font = pygame.font.Font(None, 50)
@@ -36,9 +32,7 @@ class Game:
         self.loss_text = font.render('', True, (255, 0, 0))
         self.wall_group = pygame.sprite.RenderPlain(*walls)
         self.trophy_group = pygame.sprite.RenderPlain(*trophies)
-        self.crosswalk_group = pygame.sprite.RenderPlain(*crosswalks)
         self.car_group = pygame.sprite.RenderPlain(car)
-        self.parkings = parkings
         self.rect = self.screen.get_rect()
         self.stop = False
         self.car_update = True
@@ -147,14 +141,6 @@ class Game:
                 self.car.k_right = 0
                 self.car.k_left = 0
 
-            crosswalk_collisions = pygame.sprite.groupcollide(
-                    self.car_group,
-                    self.crosswalk_group,
-                    False,
-                    False,
-                    collided=None
-                )
-
             trophy_collision = pygame.sprite.groupcollide(
                     self.car_group,
                     self.trophy_group,
@@ -162,52 +148,18 @@ class Game:
                     True
                 )
 
-            for colled_crosswalk in crosswalk_collisions.values():
-                if colled_crosswalk[0].color == "red":
-                    self.car_update = False
-                    self.win_condition = False
-                    self.car.image = pygame.image.load('images/collision.png')
-                    self.car.MAX_FORWARD_SPEED = 0
-                    self.car.MAX_REVERSE_SPEED = 0
-                    self.car.k_right = 0
-                    self.car.k_left = 0
-
             if trophy_collision != {}:
-                all_parking_done = True
-                for parking in self.parkings:
-                    if not parking.mission_complete:
-                        all_parking_done = False
-                        break
-
-                if all_parking_done:
-                    self.car_update = False
-                    self.win_condition = True
-                else:
-                    self.car_update = False
-                    self.win_condition = False
                 self.car.MAX_FORWARD_SPEED = 0
                 self.car.MAX_REVERSE_SPEED = 0
                 if self.win_condition is True:
                     self.car.k_right = -5
 
             temp_v2x_data.clear()
-            for parking in self.parkings:
-                parking.update(self.car)
-                parking.draw(self.screen)
-                if parking.is_in_range(self.car):
-                    temp_v2x_data.append((id(parking), parking.data))
 
             self.wall_group.update()
-            self.crosswalk_group.update()
-            self.crosswalk_group.draw(self.screen)
-            for crosswalk in self.crosswalk_group:
-                if crosswalk.is_in_range(self.car):
-                    temp_v2x_data.append((id(crosswalk), crosswalk.data))
+
             new_dict = dict()
 
-            for traffic_sign in self.traffic_signs:
-                traffic_sign.draw(self.screen)
-                temp_v2x_data.append((id(traffic_sign), traffic_sign.data))
             for v2x_data in temp_v2x_data:
                 key, value = v2x_data
                 new_dict[key] = value

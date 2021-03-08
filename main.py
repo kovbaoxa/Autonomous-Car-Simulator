@@ -15,15 +15,15 @@ from LiDAR import LiDAR
 def main(auto):
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (500, 30)
     _ = (Map1, Map2, Map3, Map4)
-    walls, trophies, parkings, crosswalks, traffic_signs, car = Map1
+    walls, trophies, car = Map1
     lidar = LiDAR()
     control = Control()
     database = Database(lidar, control, car)
     # Get LiDAR data, Set Control data
     brain = Brain(database)
     # Get Control data Set LiDAR data
-    game = Game(walls, trophies, parkings,
-                crosswalks, traffic_signs, car, database)
+    game = Game(walls, trophies,
+                car, database)
     if auto:
         brain_thread = threading.Thread(target=brain.run,)
         brain_thread.start()
