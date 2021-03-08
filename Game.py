@@ -42,7 +42,8 @@ class Game:
         seconds = 0
         record = False
         temp_v2x_data = []
-        while True:
+        running = True
+        while running:
             deltat = self.clock.tick(30)
             seconds += 0.03
 
@@ -57,6 +58,8 @@ class Game:
                 self.car.k_right = self.car.k_left =\
                     self.car.k_up = self.car.k_down = 0
             for event in events:
+                if event.type == pygame.QUIT:
+                    running = False
                 if auto:
                     if not hasattr(event, 'key'):
                         continue
@@ -140,6 +143,7 @@ class Game:
                 self.car.MAX_REVERSE_SPEED = 0
                 self.car.k_right = 0
                 self.car.k_left = 0
+                running = False
 
             trophy_collision = pygame.sprite.groupcollide(
                     self.car_group,
@@ -172,6 +176,7 @@ class Game:
             pygame.display.flip()
 
             self.make_lidar_data()
+        pygame.quit()
 
     def again(self, auto):
         self.__init__(*self.init_args)
