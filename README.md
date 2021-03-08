@@ -25,15 +25,12 @@ python main.py
 ### Credit
 driving club ThinKingo (see the source of the fork)
 
-```
-
-__Result of Team1__:
+__Results__:
 
 ![Team1](https://github.com/x2ever/Autonomous-Car-Simulator/blob/master/images/1팀.gif)
 
-### Preview
 
-#### LiDAR
+### LiDAR
 
 Participants receive virtual LiDAR and GPS data.
 
