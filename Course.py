@@ -4,6 +4,20 @@ from Trophy import TrophySprite
 
 import numpy as np
 
+Map0 = (
+    [
+        WallSprite((500, 50), 800, 4), # H top
+        WallSprite((500, 350), 800, 4), # H bottom
+        WallSprite((500, 200), 600, 4), # H midlle
+        WallSprite((100, 200), 4, 300), # V left
+        WallSprite((900, 200), 4, 300), # V right
+    ],
+    [
+        # TrophySprite((540, 12))
+    ],
+    CarSprite('images/car.png', (150, 200)),
+)
+
 Map1 = (
     [
         WallSprite((500, 0), 1000, 4),
