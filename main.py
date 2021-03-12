@@ -12,7 +12,7 @@ from Game import Game
 from LiDAR import LiDAR
 
 
-def main(auto):
+def main(auto, wrap):
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (500, 30)
     _ = (Map0, Map1, Map2, Map3, Map4)
     walls, trophies, car = Map0
@@ -27,7 +27,7 @@ def main(auto):
     if auto:
         brain_thread = threading.Thread(target=brain.run,)
         brain_thread.start()
-    game.run(auto=auto)
+    game.run(auto=auto, wrap=wrap)
     pygame.quit()
 
     return 0
@@ -41,5 +41,11 @@ if __name__ == "__main__":
                  but use pre-defined brain's command.",
             action="store_true", default=False
         )
+    parser.add_argument(
+            "--wrap",
+            help="Do not use your keyboard command,\
+                 but use input.txt file.",
+            action="store_true", default=False
+        )
     args = parser.parse_args()
-    main(args.auto)
+    main(args.auto, args.wrap)
