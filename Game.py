@@ -38,7 +38,9 @@ class Game:
         self.car_update = True
         self.database = database
 
-    def run(self, auto=False):
+    def run(self, auto=False, wrap=False):
+        output_file = open("output.txt", "w")
+        input_file = open("input.txt", "r")
         seconds = 0
         record = False
         temp_v2x_data = []
@@ -61,6 +63,10 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
                 if auto:
+                    if wrap:
+                        if self.win_condition is None:
+                            self.parse_input(input_file)
+                
                     if not hasattr(event, 'key'):
                         continue
                     if event.type != USEREVENT and (
@@ -85,6 +91,7 @@ class Game:
                                 self.car.k_down += -1
                         elif event.key == K_ESCAPE:
                             self.database.stop = True
+
                     elif self.win_condition is True and event.key == K_SPACE:
                         print(result)
                         self.database.stop = True
@@ -176,15 +183,44 @@ class Game:
             pygame.display.flip()
 
             self.make_lidar_data()
+            
+            # write to output file
+            for s in self.database.lidar.data.tolist():
+                output_file.write("%.1f " % s)
+            output_file.write("\n\n")
+            #print("0. is %.1f   90. is %.1f   179. is %.1f" % (self.database.lidar.data[0], self.database.lidar.data[90], self.database.lidar.data[179]))
+        output_file.close()
+        self.database.stop = True
         pygame.quit()
 
-    def again(self, auto):
+    def again(self, auto, wrap):
         self.__init__(*self.init_args)
-        self.run(auto=auto)
+        self.run(auto=auto, wrap=wrap)
+
+    def parse_input(self, file):
+        commands = iter(file.read().split())        
+        while True:
+            try:
+                cmd = next(commands)
+                if cmd == "up":
+                    for i in range(int(next(commands))):
+                        self.car.k_up += 1
+                if cmd == "down":
+                    for i in range(int(next(commands))):
+                        self.car.k_down -= 1
+                if cmd == "right":
+                    for i in range(int(next(commands))):
+                        self.car.k_right -= 1
+                if cmd == "left":
+                    for i in range(int(next(commands))):
+                        self.car.k_left += 1
+            except StopIteration:
+                print("No more commands")
+                break
 
     def make_lidar_data(self):
         lidar_data = np.zeros((360))
-        L = 100
+        L = 300
         array = pygame.surfarray.array3d(self.screen)
         car = self.database.car
         x, y = car.position
