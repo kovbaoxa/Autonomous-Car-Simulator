@@ -11,13 +11,13 @@ from Car import CarSprite
 from Trophy import TrophySprite
 from Wall import WallSprite
 
-
 class Game:
-    def __init__(self, walls, trophies, 
+    def __init__(self, walls, checkpoints, finish_line, 
                  car, database):
         self.init_args =\
             [
                 copy.copy(walls),
+                copy.copy(checkpoints),
                 copy.copy(car),
                 database
             ]
@@ -25,41 +25,80 @@ class Game:
         self.car = car
         self.screen = pygame.display.set_mode((1000, 800))
         self.clock = pygame.time.Clock()
-        font = pygame.font.Font(None, 75)
-        self.win_font = pygame.font.Font(None, 50)
+        self.font = pygame.font.Font(None, 24)
         self.win_condition = None
-        self.win_text = font.render('', True, (0, 255, 0))
-        self.loss_text = font.render('', True, (255, 0, 0))
         self.wall_group = pygame.sprite.RenderPlain(*walls)
-        self.trophy_group = pygame.sprite.RenderPlain(*trophies)
+        self.checkpoint_group = pygame.sprite.RenderPlain(*checkpoints)
+        self.finish_group = pygame.sprite.RenderPlain(*finish_line)
         self.car_group = pygame.sprite.RenderPlain(car)
         self.rect = self.screen.get_rect()
-        self.stop = False
+        self.running = False
         self.car_update = True
         self.database = database
 
+    def draw_hud(self, time, distance, win):
+        if win is None:
+            time_overlay = self.font.render("Time: " + str(round(time/1000.0, 2)), True, (255, 255, 255))
+            dist_overlay = self.font.render("Dist: " + str(round(distance, 2)), True, (255, 255, 255))
+        else:
+            if win:
+                time_overlay = self.font.render("Time: " + str(round(time/1000.0, 2)), True, (0, 255, 0))
+                dist_overlay = self.font.render("Dist: " + str(round(distance, 2)), True, (0, 255, 0))
+            else:
+                time_overlay = self.font.render("Time: " + str(round(time/1000.0, 2)), True, (255, 0, 0))
+                dist_overlay = self.font.render("Dist: " + str(round(distance, 2)), True, (255, 0, 0))
+
+        time_overlay_rect = time_overlay.get_rect()
+        dist_overlay_rect = dist_overlay.get_rect()
+        
+        time_overlay_rect.center = (850,700)
+        dist_overlay_rect.center = (850,750)
+
+        self.screen.blit(time_overlay, time_overlay_rect)
+        self.screen.blit(dist_overlay, dist_overlay_rect)
+
+    def close(self):
+        self.stop()
+        self.running = False
+
+    def stop(self):
+        self.database.stop = True
+        time.sleep(0.2)
+
     def run(self, auto=False):
         seconds = 0
-        record = False
-        temp_v2x_data = []
-        running = True
-        while running:
-            deltat = self.clock.tick(30)
-            seconds += 0.03
+        distance = 0.0
+        checkpoint_time = dict()
 
-            seconds = round(seconds, 2)
+        # Getting car initial position
+        car_current_pos_x, car_current_pos_y = self.database.car.position
 
-            if self.win_condition is not None:
-                if not record:
-                    record = True
-                    result = seconds
+        self.running = True
+        while self.running:
+            ### generate new frame
+            deltat = self.clock.tick_busy_loop(30)
+
+            if self.win_condition is None:
+                ### update running time
+                seconds += self.clock.get_time()
+
+                ### update car position
+                car_new_pos_x, car_new_pos_y = self.database.car.position
+                distance += np.sqrt((car_new_pos_x - car_current_pos_x) ** 2 + (car_new_pos_y - car_current_pos_y) ** 2)
+                car_current_pos_x = car_new_pos_x
+                car_current_pos_y = car_new_pos_y
+            else:
+                self.stop()
+
             events = pygame.event.get()
+
             if auto:
                 self.car.k_right = self.car.k_left =\
                     self.car.k_up = self.car.k_down = 0
             for event in events:
                 if event.type == pygame.QUIT:
-                    running = False
+                    self.close()
+                    break
                 if auto:
                     if not hasattr(event, 'key'):
                         continue
@@ -84,19 +123,13 @@ class Game:
                             if self.car.k_down > -5:
                                 self.car.k_down += -1
                         elif event.key == K_ESCAPE:
-                            self.database.stop = True
+                            self.close()
                     elif self.win_condition is True and event.key == K_SPACE:
-                        print(result)
-                        self.database.stop = True
-                        time.sleep(0.1)
+                        self.close()
                     elif self.win_condition is False and event.key == K_SPACE:
-                        print(result)
-                        time.sleep(0.1)
-                        self.database.stop = True
+                        self.close()
                     elif event.key == K_ESCAPE:
-                        self.database.stop = True
-                        print(result)
-                        time.sleep(0.1)
+                        self.close()
                 else:
                     if not hasattr(event, 'key'):
                         continue
@@ -111,28 +144,21 @@ class Game:
                         elif event.key == K_DOWN:
                             self.car.k_down = down * -2
                         elif event.key == K_ESCAPE:
-                            self.database.stop = True
+                            self.close()
                     elif self.win_condition is True and event.key == K_SPACE:
-                        print(result)
-                        time.sleep(0.1)
-                        self.database.stop = True
+                        self.close()
                     elif self.win_condition is False and event.key == K_SPACE:
-                        print(result)
-                        time.sleep(0.1)
-                        self.database.stop = True
-
+                        self.close()
                     elif event.key == K_ESCAPE:
-                        print(result)
-                        time.sleep(0.1)
-                        self.database.stop = True
-
-            if self.database.stop:
-                break
+                        self.close()
 
             # RENDERING
             self.screen.fill((0, 0, 0))
             if self.car_update:
                 self.car_group.update(deltat)
+            
+            self.draw_hud(seconds, distance, self.win_condition)
+
             collisions = pygame.sprite.groupcollide(
                 self.car_group, self.wall_group, False, False, collided=None)
             if collisions != {}:
@@ -143,40 +169,45 @@ class Game:
                 self.car.MAX_REVERSE_SPEED = 0
                 self.car.k_right = 0
                 self.car.k_left = 0
-                running = False
 
-            trophy_collision = pygame.sprite.groupcollide(
+            for checkpoint in self.checkpoint_group:
+                if pygame.sprite.spritecollide(checkpoint, self.car_group, False, False):
+                    if checkpoint.name not in checkpoint_time.keys():
+                        print("Checkpoint ", checkpoint.name, ":", distance, " at ", seconds)
+                        checkpoint_time[checkpoint.name] = {"distance" : distance, "time" : seconds}
+
+            finish_collision = pygame.sprite.groupcollide(
                     self.car_group,
-                    self.trophy_group,
+                    self.finish_group,
                     False,
-                    True
+                    False
                 )
 
-            if trophy_collision != {}:
+            if finish_collision != {}:
+                self.win_condition = True
                 self.car.MAX_FORWARD_SPEED = 0
                 self.car.MAX_REVERSE_SPEED = 0
-                if self.win_condition is True:
-                    self.car.k_right = -5
-
-            temp_v2x_data.clear()
 
             self.wall_group.update()
+            self.checkpoint_group.update()
 
-            new_dict = dict()
-
-            for v2x_data in temp_v2x_data:
-                key, value = v2x_data
-                new_dict[key] = value
-            self.database.v2x_data = new_dict
-            # print(self.database.v2x_data)
             self.wall_group.draw(self.screen)
+            self.checkpoint_group.draw(self.screen)
+            self.finish_group.draw(self.screen)
             self.car_group.draw(self.screen)
-            self.trophy_group.draw(self.screen)
             # Counter Render
             pygame.display.flip()
 
             self.make_lidar_data()
-        pygame.quit()
+
+        self.stop()
+
+        if self.win_condition:
+            print("You win!")
+        else:
+            print("You lose!")
+
+        return seconds, distance, checkpoint_time
 
     def again(self, auto):
         self.__init__(*self.init_args)
@@ -290,18 +321,3 @@ class Game:
             lidar_data[self.car.direction % 360:
                        self.car.direction % 360 + 180]
         self.database.lidar.data = lidar_data
-
-
-if __name__ == "__main__":
-    walls = [
-        WallSprite((512, 2.5), 1024, 5),
-        WallSprite((512, 765.5), 1024, 5),
-        WallSprite((2.5, 384), 5, 768),
-        WallSprite((1021.5, 384), 5, 768)
-    ]
-    trophies = [
-        TrophySprite((300, 50))
-    ]
-    car = CarSprite('images/car.png', (50, 700))
-    g = Game(walls, trophies, car)
-    g.run()

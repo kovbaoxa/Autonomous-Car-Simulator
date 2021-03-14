@@ -15,19 +15,29 @@ from LiDAR import LiDAR
 def main(auto):
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (500, 30)
     _ = (Map0, Map1, Map2, Map3, Map4)
-    walls, trophies, car = Map0
+    walls, checkpoints, trophies, car = Map0
     lidar = LiDAR()
     control = Control()
     database = Database(lidar, control, car)
     # Get LiDAR data, Set Control data
     brain = Brain(database)
     # Get Control data Set LiDAR data
-    game = Game(walls, trophies,
-                car, database)
+    game = Game(walls, checkpoints, trophies, car, database)
+
+    brain_thread = None
     if auto:
         brain_thread = threading.Thread(target=brain.run,)
         brain_thread.start()
-    game.run(auto=auto)
+
+    t, d, c = game.run(auto=auto)
+    if brain_thread is not None:
+        brain_thread.join()
+
+    print("Time: ", round(t / 1000.0, 2))
+    print("Dist: ", round(d, 2))
+    for k, v in c.items():
+        print(k, "at time", v["time"], "- dist:", v["distance"])
+
     pygame.quit()
 
     return 0

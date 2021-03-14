@@ -1,21 +1,26 @@
 from Wall import WallSprite
+from Checkpoint import CheckpointSprite
 from Car import CarSprite
 from Trophy import TrophySprite
+from FinishLine import FinishLineSprite
 
 import numpy as np
 
 Map0 = (
     [
-        WallSprite((500, 50), 800, 4), # H top
-        WallSprite((500, 350), 800, 4), # H bottom
-        WallSprite((500, 200), 600, 4), # H midlle
-        WallSprite((100, 200), 4, 300), # V left
-        WallSprite((900, 200), 4, 300), # V right
+        WallSprite((500, 100), 100, 4), # H top
+        WallSprite((500, 700), 100, 4), # H bottom
+        WallSprite((450, 400), 4, 600), # V left
+        WallSprite((550, 400), 4, 600), # V right
     ],
     [
-        # TrophySprite((540, 12))
+        CheckpointSprite((500, 500), 100, 1, "checkpoint_1"),
+        CheckpointSprite((500, 300), 100, 1, "checkpoint_2")
     ],
-    CarSprite('images/car.png', (150, 200)),
+    [
+        FinishLineSprite((500, 150), 100)
+    ],
+    CarSprite('images/car.png', (500, 650)),
 )
 
 Map1 = (
@@ -35,7 +40,9 @@ Map1 = (
         WallSprite((460, 550), 120, 4),
     ],
     [
-        TrophySprite((540, 12))
+    ],
+    [
+        FinishLineSprite((540, 12))
     ],
     CarSprite('images/car.png', (500, 760)),
 )
@@ -56,7 +63,9 @@ Map2 = (
         WallSprite((720, 350), 4, 700),
     ],
     [
-        TrophySprite((930, 20))
+    ],
+    [
+        FinishLineSprite((930, 20))
     ],
     CarSprite('images/car.png', (60, 750)),
 )
@@ -86,7 +95,9 @@ Map3 = (
         WallSprite((270, 560), 100, 4),
     ],
     [
-        TrophySprite((350, 720))
+    ],
+    [
+        FinishLineSprite((350, 720))
     ],
     CarSprite('images/car.png', (500, 760)),
 )
@@ -114,7 +125,9 @@ Map4 = (
         WallSprite((470, 570), 4, 60),
     ],
     [
-        TrophySprite((465, 15))
+    ],
+    [
+        FinishLineSprite((465, 15))
     ],
     CarSprite('images/car.png', (500, 760)),
 )
