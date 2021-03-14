@@ -3,8 +3,12 @@
 ### Dependencies
 
 - Python 3
-- numpy (pip install numpy)
-- pygame (pip install pygame)
+- numpy
+- pygame
+
+```
+pip install -r requirements.txt
+```
 
 ### Usage
 
