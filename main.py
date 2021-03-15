@@ -6,37 +6,60 @@ import pygame
 
 from Brain import Brain
 from Control import Control
-from Course import Map0, Map1, Map2, Map3, Map4
+from Tracks import Map0, Map1, Map2, Map3, Map4
 from Database import Database
 from Game import Game
 from LiDAR import LiDAR
 
+# game thread notifies brain as soon as the LiDAR data is ready
+g_sync_cv = threading.Condition()
 
-def main(auto):
+# brain thread notifies game when its computation is finished
+# - if computation is too long, game thread is unlocked to guarantee the
+#   minimum framerate
+g_brain_cv = threading.Condition()
+
+def main(auto, map_idx):
+    map_list = [Map0, Map1, Map2, Map3, Map4]
+    if map_idx not in range(len(map_list)):
+        print("Invalid map index")
+        return
+
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (500, 30)
-    _ = (Map0, Map1, Map2, Map3, Map4)
-    walls, checkpoints, trophies, car = Map0
+    walls, checkpoints, finish_line, car, hud_pos = map_list[map_idx]
     lidar = LiDAR()
     control = Control()
     database = Database(lidar, control, car)
     # Get LiDAR data, Set Control data
     brain = Brain(database)
     # Get Control data Set LiDAR data
-    game = Game(walls, checkpoints, trophies, car, database)
+    game = Game(walls, checkpoints, finish_line, car, database, hud_pos=hud_pos)
 
     brain_thread = None
     if auto:
-        brain_thread = threading.Thread(target=brain.run,)
+        brain_thread = threading.Thread(target=brain.run, args=(g_sync_cv, g_brain_cv,))
         brain_thread.start()
 
-    t, d, c = game.run(auto=auto)
+    win, t, d, c = game.run(auto=auto, cv=g_sync_cv, bcv=g_brain_cv)
+
     if brain_thread is not None:
         brain_thread.join()
 
-    print("Time: ", round(t / 1000.0, 2))
-    print("Dist: ", round(d, 2))
-    for k, v in c.items():
-        print(k, "at time", v["time"], "- dist:", v["distance"])
+    if win is not None: 
+        if win:
+            print("Congrats! You won")
+        else:
+            print("Too bad! You lose")
+
+        print("### REPORT ###")
+        print("Running time: {:.3f}".format(t / 1000.0))
+        print("Running dist: {:.1f}".format(d))
+        if c.items():
+            print("Checkpoints:")
+            for k, v in c.items():
+                print("- {} : time {:.03f} - dist: {:.1f}".format(k, v["time"] / 1000.0, v["distance"]))
+    else:
+        print("Exit")
 
     pygame.quit()
 
@@ -46,10 +69,18 @@ def main(auto):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-            "--auto",
+            "-a", "--auto",
             help="Do not use your keyboard command,\
                  but use pre-defined brain's command.",
-            action="store_true", default=False
+            action="store_true",
+            default=False
+            # type=bool
+        )
+    parser.add_argument(
+            "-m", "--map",
+            help="Choose which map to run [options 0 - 4]",
+            action="store",
+            default=0
         )
     args = parser.parse_args()
-    main(args.auto)
+    main(args.auto, int(args.map))

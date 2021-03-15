@@ -6,6 +6,13 @@ from FinishLine import FinishLineSprite
 
 import numpy as np
 
+### Format: a map is a tuple composed of the following fields
+### - a list of WallSprites which delimit the track
+### - a list of CheckpointSprites which set optional checkpoints
+### - a list of FinishLineSprites which identify the end of the track (should be only one)
+### - the CarSprite with its initial position
+### - the HUD (text timing info) position (dictionary with x, y coordinates)
+
 Map0 = (
     [
         WallSprite((500, 100), 100, 4), # H top
@@ -14,13 +21,14 @@ Map0 = (
         WallSprite((550, 400), 4, 600), # V right
     ],
     [
-        CheckpointSprite((500, 500), 100, 1, "checkpoint_1"),
-        CheckpointSprite((500, 300), 100, 1, "checkpoint_2")
+        CheckpointSprite((500, 500), 100, 1, "Checkpoint 1"),
+        CheckpointSprite((500, 300), 100, 1, "Checkpoint 2")
     ],
     [
         FinishLineSprite((500, 150), 100)
     ],
     CarSprite('images/car.png', (500, 650)),
+    {"x" : 850, "y" : 700}
 )
 
 Map1 = (
@@ -42,9 +50,10 @@ Map1 = (
     [
     ],
     [
-        FinishLineSprite((540, 12))
+        FinishLineSprite((590, 50), 96, True)
     ],
     CarSprite('images/car.png', (500, 760)),
+    {"x" : 850, "y" : 700}
 )
 
 Map2 = (
@@ -65,9 +74,10 @@ Map2 = (
     [
     ],
     [
-        FinishLineSprite((930, 20))
+        FinishLineSprite((990, 50), 96, True)
     ],
     CarSprite('images/car.png', (60, 750)),
+    {"x" : 910, "y" : 700}
 )
 
 Map3 = (
@@ -97,9 +107,10 @@ Map3 = (
     [
     ],
     [
-        FinishLineSprite((350, 720))
+        FinishLineSprite((380, 790), 120)
     ],
     CarSprite('images/car.png', (500, 760)),
+    {"x" : 850, "y" : 700}
 )
 
 Map4 = (
@@ -127,7 +138,8 @@ Map4 = (
     [
     ],
     [
-        FinishLineSprite((465, 15))
+        FinishLineSprite((500, 50), 96, True)
     ],
     CarSprite('images/car.png', (500, 760)),
+    {"x" : 850, "y" : 725}
 )

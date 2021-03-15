@@ -11,9 +11,19 @@ from Car import CarSprite
 from Trophy import TrophySprite
 from Wall import WallSprite
 
+# default frame duration in seconds
+DFT_FRAME_DURATION = 0.0333
+# maximum frame duration
+MAX_FRAME_DURATION = 0.5
+# default simulation time
+DFT_SIM_DELTA_TIME = 0.0333
+
 class Game:
-    def __init__(self, walls, checkpoints, finish_line, 
-                 car, database):
+    def __init__(self, walls, checkpoints, finish_line, car, database,
+                 frame_duration = DFT_FRAME_DURATION,
+                 sim_delta      = DFT_SIM_DELTA_TIME,
+                 hud_pos        = {"x" : 850, "y" : 700}
+        ):
         self.init_args =\
             [
                 copy.copy(walls),
@@ -35,27 +45,34 @@ class Game:
         self.running = False
         self.car_update = True
         self.database = database
+        # frame duration in secs (can't be more than MAX_FRAME_DURATION)
+        self.frame_duration = frame_duration if frame_duration <= MAX_FRAME_DURATION else MAX_FRAME_DURATION
+        # simulation step duration in ms
+        self.simulation_step = sim_delta * 1000.0
+        # hud position
+        self.hud_pos = hud_pos
 
-    def draw_hud(self, time, distance, win):
-        if win is None:
-            time_overlay = self.font.render("Time: " + str(round(time/1000.0, 2)), True, (255, 255, 255))
-            dist_overlay = self.font.render("Dist: " + str(round(distance, 2)), True, (255, 255, 255))
-        else:
-            if win:
-                time_overlay = self.font.render("Time: " + str(round(time/1000.0, 2)), True, (0, 255, 0))
-                dist_overlay = self.font.render("Dist: " + str(round(distance, 2)), True, (0, 255, 0))
+    def draw_hud(self, millisec, distance, win):
+        if self.hud_pos is not None:
+            if win is None:
+                time_overlay = self.font.render("Time: {:.03f}".format(millisec/1000.0), True, (255, 255, 255))
+                dist_overlay = self.font.render("Dist: {:.1f}".format(distance), True, (255, 255, 255))
             else:
-                time_overlay = self.font.render("Time: " + str(round(time/1000.0, 2)), True, (255, 0, 0))
-                dist_overlay = self.font.render("Dist: " + str(round(distance, 2)), True, (255, 0, 0))
+                if win:
+                    time_overlay = self.font.render("Time: {:.03f}".format(millisec/1000.0), True, (0, 255, 0))
+                    dist_overlay = self.font.render("Dist: {:.1f}".format(distance), True, (0, 255, 0))
+                else:
+                    time_overlay = self.font.render("Time: {:.03f}".format(millisec/1000.0), True, (255, 0, 0))
+                    dist_overlay = self.font.render("Dist: {:.1f}".format(distance), True, (255, 0, 0))
 
-        time_overlay_rect = time_overlay.get_rect()
-        dist_overlay_rect = dist_overlay.get_rect()
-        
-        time_overlay_rect.center = (850,700)
-        dist_overlay_rect.center = (850,750)
+            time_overlay_rect = time_overlay.get_rect()
+            dist_overlay_rect = dist_overlay.get_rect()
+            
+            time_overlay_rect.center = (self.hud_pos['x'], self.hud_pos['y'])
+            dist_overlay_rect.center = (self.hud_pos['x'], self.hud_pos['y'] + 50)
 
-        self.screen.blit(time_overlay, time_overlay_rect)
-        self.screen.blit(dist_overlay, dist_overlay_rect)
+            self.screen.blit(time_overlay, time_overlay_rect)
+            self.screen.blit(dist_overlay, dist_overlay_rect)
 
     def close(self):
         self.stop()
@@ -65,26 +82,41 @@ class Game:
         self.database.stop = True
         time.sleep(0.2)
 
-    def run(self, auto=False):
-        seconds = 0
-        distance = 0.0
+    def run(self, auto=False, cv=None, bcv=None):
+
+        print("Running at {:.0f} fps".format(1.0/self.frame_duration))
+
+        ### Init running time and running speed
+        self.database.runTime = 0.0
+        self.database.run_dist = 0.0
         checkpoint_time = dict()
 
         # Getting car initial position
         car_current_pos_x, car_current_pos_y = self.database.car.position
 
+        # Start simulation
         self.running = True
+
         while self.running:
-            ### generate new frame
-            deltat = self.clock.tick_busy_loop(30)
+            start_time = time.time()
+
+            if auto:
+                with bcv:
+                    bcv.wait(self.frame_duration)
+            else:
+                ### generate new frame
+                self.clock.tick_busy_loop(30)
 
             if self.win_condition is None:
                 ### update running time
-                seconds += self.clock.get_time()
+                if auto:
+                    self.database.run_time += self.simulation_step
+                else:
+                    self.database.run_time += self.clock.get_time()
 
                 ### update car position
                 car_new_pos_x, car_new_pos_y = self.database.car.position
-                distance += np.sqrt((car_new_pos_x - car_current_pos_x) ** 2 + (car_new_pos_y - car_current_pos_y) ** 2)
+                self.database.run_dist += np.sqrt((car_new_pos_x - car_current_pos_x) ** 2 + (car_new_pos_y - car_current_pos_y) ** 2)
                 car_current_pos_x = car_new_pos_x
                 car_current_pos_y = car_new_pos_y
             else:
@@ -155,15 +187,15 @@ class Game:
             # RENDERING
             self.screen.fill((0, 0, 0))
             if self.car_update:
-                self.car_group.update(deltat)
+                self.car_group.update()
             
-            self.draw_hud(seconds, distance, self.win_condition)
+            self.draw_hud(self.database.run_time, self.database.run_dist, self.win_condition)
 
             collisions = pygame.sprite.groupcollide(
                 self.car_group, self.wall_group, False, False, collided=None)
             if collisions != {}:
-                self.car_update = False
                 self.win_condition = False
+                self.car_update = False
                 self.car.image = pygame.image.load('images/collision.png')
                 self.car.MAX_FORWARD_SPEED = 0
                 self.car.MAX_REVERSE_SPEED = 0
@@ -173,8 +205,7 @@ class Game:
             for checkpoint in self.checkpoint_group:
                 if pygame.sprite.spritecollide(checkpoint, self.car_group, False, False):
                     if checkpoint.name not in checkpoint_time.keys():
-                        print("Checkpoint ", checkpoint.name, ":", distance, " at ", seconds)
-                        checkpoint_time[checkpoint.name] = {"distance" : distance, "time" : seconds}
+                        checkpoint_time[checkpoint.name] = {"distance" : self.database.run_dist, "time" : self.database.run_time}
 
             finish_collision = pygame.sprite.groupcollide(
                     self.car_group,
@@ -185,6 +216,7 @@ class Game:
 
             if finish_collision != {}:
                 self.win_condition = True
+                self.car_update = False
                 self.car.MAX_FORWARD_SPEED = 0
                 self.car.MAX_REVERSE_SPEED = 0
 
@@ -200,18 +232,19 @@ class Game:
 
             self.make_lidar_data()
 
+            if auto:
+                with cv:
+                    cv.notifyAll()
+            
+            exec_time = time.time() - start_time
+
+            if(exec_time < self.frame_duration):
+                time.sleep(self.frame_duration - exec_time)
+                
+
         self.stop()
 
-        if self.win_condition:
-            print("You win!")
-        else:
-            print("You lose!")
-
-        return seconds, distance, checkpoint_time
-
-    def again(self, auto):
-        self.__init__(*self.init_args)
-        self.run(auto=auto)
+        return self.win_condition, self.database.run_time, self.database.run_dist, checkpoint_time
 
     def make_lidar_data(self):
         lidar_data = np.zeros((360))
