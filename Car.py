@@ -5,7 +5,7 @@ import sys
 import platform
 
 from Authority import AuthorityExecption
-
+from numpy import sqrt
 
 class CarSprite(pygame.sprite.Sprite):
     __MAX_FORWARD_SPEED = 15
@@ -38,6 +38,9 @@ class CarSprite(pygame.sprite.Sprite):
             pygame.transform.rotate(self.__src_image, self.__direction)
         self.rect = self.image.get_rect()
         self.rect.center = self.__position
+
+    def distance_from(self, point: tuple):
+        return sqrt((self.__position[0] - point[0]) ** 2 + (self.__position[1] - point[1]) ** 2)
 
     @property
     def MAX_FORWARD_SPEED(self):
