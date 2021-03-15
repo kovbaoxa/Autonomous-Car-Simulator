@@ -40,7 +40,13 @@ def main(auto, wrap, map_idx):
         brain_thread = threading.Thread(target=brain.run, args=(g_sync_cv, g_brain_cv,))
         brain_thread.start()
 
-    win, t, d, c = game.run(auto=auto, wrap=wrap, cv=g_sync_cv, bcv=g_brain_cv)
+    res = tuple()
+    if auto:
+        res = game.runAuto(wrap=wrap, cv=g_sync_cv, bcv=g_brain_cv)
+    else:
+        res = game.runManual()
+
+    win, t, d, c = res
 
     if brain_thread is not None:
         brain_thread.join()

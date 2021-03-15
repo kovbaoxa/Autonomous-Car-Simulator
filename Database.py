@@ -6,4 +6,5 @@ class Database:
         self.stop = False
         self.run_time = 0.0
         self.run_dist = 0.0
+        self.checkpoint_time = dict()
         self.v2x_data = dict()
