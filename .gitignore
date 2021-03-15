@@ -2,3 +2,7 @@ __pycache__/*
 test.py
 .vscode/*
 gym_autonmscar.egg-info/*
+
+# Automatic control wrap data
+input.txt
+output.txt
