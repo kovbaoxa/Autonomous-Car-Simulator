@@ -40,29 +40,31 @@ def main(auto, wrap, map_idx):
         brain_thread = threading.Thread(target=brain.run, args=(g_sync_cv, g_brain_cv,))
         brain_thread.start()
 
-    res = tuple()
-    if auto:
-        res = game.runAuto(wrap=wrap, cv=g_sync_cv, bcv=g_brain_cv)
-    else:
-        res = game.runManual()
+    res_win  = None
+    res_time = None
+    res_dist = None
+    res_ckpt = None # checkpoints
 
-    win, t, d, c = res
+    if auto:
+        res_win, res_time, res_dist, res_ckpt = game.runAuto(wrap=wrap, cv=g_sync_cv, bcv=g_brain_cv)
+    else:
+        res_win, res_time, res_dist, res_ckpt = game.runManual()
 
     if brain_thread is not None:
         brain_thread.join()
 
-    if win is not None: 
-        if win:
+    if res_win is not None:
+        if res_win:
             print("Congrats! You won")
         else:
             print("Too bad! You lose")
 
         print("### REPORT ###")
-        print("Running time: {:.3f}".format(t / 1000.0))
-        print("Running dist: {:.1f}".format(d))
-        if c.items():
+        print("Running time: {:.3f}".format(res_time / 1000.0))
+        print("Running dist: {:.1f}".format(res_dist))
+        if res_ckpt.items():
             print("Checkpoints:")
-            for k, v in c.items():
+            for k, v in res_ckpt.items():
                 print("- {} : time {:.03f} - dist: {:.1f}".format(k, v["time"] / 1000.0, v["distance"]))
     else:
         print("Exit")

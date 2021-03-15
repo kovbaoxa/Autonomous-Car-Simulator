@@ -32,25 +32,37 @@ class Game:
                 database
             ]
         pygame.init()
-        self.car = car
+
+        ### GRAPHIC OBJECTS
+        ### - Surfaces
         self.screen = pygame.display.set_mode((1000, 800))
-        self.clock = pygame.time.Clock()
-        self.font = pygame.font.Font(None, 24)
-        self.win_condition = None
+        self.rect = self.screen.get_rect()
+        ### - Sprites
+        self.car = car
+        ### - Groups
+        self.car_group = pygame.sprite.RenderPlain(car)
         self.wall_group = pygame.sprite.RenderPlain(*walls)
         self.checkpoint_group = pygame.sprite.RenderPlain(*checkpoints)
         self.finish_group = pygame.sprite.RenderPlain(*finish_line)
-        self.car_group = pygame.sprite.RenderPlain(car)
-        self.rect = self.screen.get_rect()
+        ### - Text
+        self.font = pygame.font.Font(None, 24)
+
+        ### TIMING
+        self.clock = pygame.time.Clock()
+
+        ### GAME LOGIC
         self.running = False
         self.car_update = True
-        self.database = database
+        self.win_condition = None
         # frame duration in secs (can't be more than MAX_FRAME_DURATION)
         self.frame_duration = frame_duration if frame_duration <= MAX_FRAME_DURATION else MAX_FRAME_DURATION
         # simulation step duration in ms
         self.simulation_step = sim_delta * 1000.0
         # hud position
         self.hud_pos = hud_pos
+
+        ### SHARED
+        self.database = database
 
     def draw_hud(self, millisec, distance, win):
         if self.hud_pos is not None:
@@ -95,7 +107,7 @@ class Game:
         self.database.checkpoint_time = dict()
 
         # Getting car initial position
-        car_current_pos_x, car_current_pos_y = self.database.car.position
+        car_current_pos = self.car.position
 
         # Start simulation
         self.running = True
@@ -110,11 +122,9 @@ class Game:
                 ### update running time
                 self.database.run_time += self.simulation_step
 
-                ### update car position
-                car_new_pos_x, car_new_pos_y = self.database.car.position
-                self.database.run_dist += np.sqrt((car_new_pos_x - car_current_pos_x) ** 2 + (car_new_pos_y - car_current_pos_y) ** 2)
-                car_current_pos_x = car_new_pos_x
-                car_current_pos_y = car_new_pos_y
+                ### update running distance
+                self.database.run_dist += self.car.distance_from(car_current_pos)
+                car_current_pos = self.car.position
             else:
                 self.stop()
 
@@ -170,7 +180,7 @@ class Game:
         self.database.checkpoint_time = dict()
 
         # Getting car initial position
-        car_current_pos_x, car_current_pos_y = self.database.car.position
+        car_current_pos = self.car.position
 
         # Start simulation
         self.running = True
@@ -183,11 +193,9 @@ class Game:
                 ### update running time
                 self.database.run_time += self.clock.get_time()
 
-                ### update car position
-                car_new_pos_x, car_new_pos_y = self.database.car.position
-                self.database.run_dist += np.sqrt((car_new_pos_x - car_current_pos_x) ** 2 + (car_new_pos_y - car_current_pos_y) ** 2)
-                car_current_pos_x = car_new_pos_x
-                car_current_pos_y = car_new_pos_y
+                ### update running distance
+                self.database.run_dist += self.car.distance_from(car_current_pos)
+                car_current_pos = self.car.position
             else:
                 self.stop()
 
@@ -298,7 +306,7 @@ class Game:
         lidar_data = np.zeros((360))
         L = 300
         array = pygame.surfarray.array3d(self.screen)
-        car = self.database.car
+        car = self.car
         x, y = car.position
 
         car_direction = car.direction % 360
