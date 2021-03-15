@@ -22,7 +22,7 @@ class Game:
     def __init__(self, walls, checkpoints, finish_line, car, database,
                  frame_duration = DFT_FRAME_DURATION,
                  sim_delta      = DFT_SIM_DELTA_TIME,
-                 hud_pos        = {"x" : 850, "y" : 700}
+                 hud_pos        = (850, 700)
         ):
         self.init_args =\
             [
@@ -63,28 +63,6 @@ class Game:
 
         ### SHARED
         self.database = database
-
-    def draw_hud(self, millisec, distance, win):
-        if self.hud_pos is not None:
-            if win is None:
-                time_overlay = self.font.render("Time: {:.03f}".format(millisec/1000.0), True, (255, 255, 255))
-                dist_overlay = self.font.render("Dist: {:.1f}".format(distance), True, (255, 255, 255))
-            else:
-                if win:
-                    time_overlay = self.font.render("Time: {:.03f}".format(millisec/1000.0), True, (0, 255, 0))
-                    dist_overlay = self.font.render("Dist: {:.1f}".format(distance), True, (0, 255, 0))
-                else:
-                    time_overlay = self.font.render("Time: {:.03f}".format(millisec/1000.0), True, (255, 0, 0))
-                    dist_overlay = self.font.render("Dist: {:.1f}".format(distance), True, (255, 0, 0))
-
-            time_overlay_rect = time_overlay.get_rect()
-            dist_overlay_rect = dist_overlay.get_rect()
-            
-            time_overlay_rect.center = (self.hud_pos['x'], self.hud_pos['y'])
-            dist_overlay_rect.center = (self.hud_pos['x'], self.hud_pos['y'] + 50)
-
-            self.screen.blit(time_overlay, time_overlay_rect)
-            self.screen.blit(dist_overlay, dist_overlay_rect)
 
     def close(self):
         self.stop()
@@ -279,6 +257,28 @@ class Game:
         self.checkpoint_group.draw(self.screen)
         self.finish_group.draw(self.screen)
         self.car_group.draw(self.screen)
+
+    def draw_hud(self, millisec, distance, win):
+        if self.hud_pos is not None:
+            if win is None:
+                time_overlay = self.font.render("Time: {:.03f}".format(millisec/1000.0), True, (255, 255, 255))
+                dist_overlay = self.font.render("Dist: {:.1f}".format(distance), True, (255, 255, 255))
+            else:
+                if win:
+                    time_overlay = self.font.render("Time: {:.03f}".format(millisec/1000.0), True, (0, 255, 0))
+                    dist_overlay = self.font.render("Dist: {:.1f}".format(distance), True, (0, 255, 0))
+                else:
+                    time_overlay = self.font.render("Time: {:.03f}".format(millisec/1000.0), True, (255, 0, 0))
+                    dist_overlay = self.font.render("Dist: {:.1f}".format(distance), True, (255, 0, 0))
+
+            time_overlay_rect = time_overlay.get_rect()
+            dist_overlay_rect = dist_overlay.get_rect()
+
+            time_overlay_rect.center = (self.hud_pos[0], self.hud_pos[1])
+            dist_overlay_rect.center = (self.hud_pos[0], self.hud_pos[1] + 50)
+
+            self.screen.blit(time_overlay, time_overlay_rect)
+            self.screen.blit(dist_overlay, dist_overlay_rect)
 
 
     def parse_input(self, file):
