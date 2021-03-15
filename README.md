@@ -3,8 +3,12 @@
 ### Dependencies
 
 - Python 3
-- numpy (pip install numpy)
-- pygame (pip install pygame)
+- numpy
+- pygame
+
+```
+pip install -r requirements.txt
+```
 
 ### Usage
 
@@ -22,6 +26,15 @@ Drive with Keyboard.
 ```
 python main.py
 ```
+
+#### Maps
+
+Choose one of the available maps
+
+```
+python main.py --maps <0-4>
+```
+
 ### Credit
 driving club ThinKingo (see the source of the fork)
 

@@ -1,18 +1,14 @@
 import time
 import pygame
 
-
 class Brain:
     def __init__(self, database):
         self.database = database
 
-    def run(self):
-        while True:
-            if self.database.stop:
-                break
-
-            time.sleep(0.001)
-            _ = pygame.event.get()
+    def run(self, cv=None, bcv=None):
+        while self.isRunning():
+            with cv:
+                cv.wait()
 
             '''
             DO NOT CHANGE CODE ABOVE!!!!
@@ -21,51 +17,76 @@ class Brain:
                 data = self.database.lidar.data
 
             2. How can i move a car?
-                self.database.control.up()
-                self.database.control.down()
-                self.database.control.right()
-                self.database.control.left()
-
-                OR
-
                 self.up(num)
                 self.down(num)
                 self.right(num)
                 self.left(num)
 
-                ☆☆☆☆☆ In one loop,
-                you can only change the speed up to 5 and the angle up to 8!!
+                In one loop, you can only change the speed up to 5 and the angle up to 8
 
             3. How can i get a car status data?
-                self.database.car.direction
-                self.database.car.speed
+                self.getCarSpeed()
+                self.getCarDirection()
 
-            4. How can i get a v2x data?
-                self.database.v2x_data
             '''
+            ####################################################################
+            # Implement Your Algorithm form HERE...
+            ####################################################################
 
-            # Implement Your Algorithm HERE!!
+            # Simulation data
+            print("Time: {:.3f} - Distance: {:.1f}".format(self.getRunTime() / 1000.0, self.getRunDistance()))
 
-            # EXAMPLE CODE1: 속도 2로 유지하면서 오른쪽으로 회전하기
-            self.right()
+            # Car data
+            print("Direction: {} - Speed: {}".format(self.getCarDirection(), self.getCarSpeed()))
 
-            if self.database.car.speed <= 2:
-                self.up()
-            elif self.database.car.speed > 3:
-                self.down()
+            if self.getCarSpeed() <= 5:
+                self.up(1)
+
+            if(self.getCarDirection() > 0):
+                self.right(1)
+            else:
+                self.left(1)
+
+            ####################################################################
+            # to HERE!!
+            ####################################################################
+
+            with bcv:
+                bcv.notifyAll()
+
+    ####################################################################
+    # CAR CONTROL
+    ####################################################################
 
     def up(self, num: int = 1):
-        for i in range(num):
-            self.database.control.up()
+        self.database.control.up(num)
 
     def down(self, num: int = 1):
-        for i in range(num):
-            self.database.control.down()
+        self.database.control.down(num)
 
     def right(self, num: int = 1):
-        for i in range(num):
-            self.database.control.right()
+        self.database.control.right(num)
 
     def left(self, num: int = 1):
-        for i in range(num):
-            self.database.control.left()
+        self.database.control.left(num)
+
+    ####################################################################
+    # SIMULATION INFO
+    ####################################################################
+    def isRunning(self):
+        return not self.database.stop
+
+    def getCarSpeed(self):
+        return self.database.car.speed
+
+    def getCarDirection(self):
+        return self.database.car.direction
+
+    def getRunTime(self):
+        return self.database.run_time
+
+    def getRunDistance(self):
+        return self.database.run_dist
+
+    def getLidarData(self):
+        return self.database.lidar.data

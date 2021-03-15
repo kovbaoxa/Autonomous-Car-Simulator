@@ -13,25 +13,34 @@ class Control:
         self.left_event =\
             pygame.event.Event(pygame.USEREVENT, {'key': K_LEFT})
 
-    def up(self):
+    def up(self, repeat: int = 1):
+        if repeat > 5:
+            repeat = 5
         try:
-            pygame.event.post(self.up_event)
+            for _ in range(repeat):
+                pygame.event.post(self.up_event)
         except pygame.error:
             pass
 
-    def down(self):
+    def down(self, repeat: int = 1):
+        if repeat > 5:
+            repeat = 5
         try:
             pygame.event.post(self.down_event)
         except pygame.error:
             pass
 
-    def right(self):
+    def right(self, repeat: int = 1):
+        if repeat > 8:
+            repeat = 8
         try:
             pygame.event.post(self.right_event)
         except pygame.error:
             pass
 
-    def left(self):
+    def left(self, repeat: int = 1):
+        if repeat > 8:
+            repeat = 8
         try:
             pygame.event.post(self.left_event)
         except pygame.error:
