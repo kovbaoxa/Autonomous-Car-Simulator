@@ -45,9 +45,32 @@ class CarSprite(pygame.sprite.Sprite):
         return sqrt((self.__position[0] - point[0]) ** 2 + (self.__position[1] - point[1]) ** 2)
 
     def stop(self):
-        self.__speed           = 0
-        self.__speed_variation = 0
-        self.__dir_variation   = 0
+        if platform.system() == 'Windows':
+            if inspect.stack()[1][1].split('\\')[-1] == 'Game.py':
+                self.__speed           = 0
+                self.__speed_variation = 0
+                self.__dir_variation   = 0
+            else:
+                sys.tracebacklimit = 0
+                print("YOU ARE TRYING TO CHEAT!")
+                raise AuthorityExecption('Not allowed File %s is trying to \
+                    change CarSprite.k_up at \'%s\'' % (
+                        inspect.stack()[1][1].split('\\')[-1],
+                        inspect.stack()[1][0])
+                        )
+        else:
+            if inspect.stack()[1][1].split('/')[-1] == 'Game.py':
+                self.__speed           = 0
+                self.__speed_variation = 0
+                self.__dir_variation   = 0
+            else:
+                sys.tracebacklimit = 0
+                print("YOU ARE TRYING TO CHEAT!")
+                raise AuthorityExecption('Not allowed File %s is trying to \
+                    change CarSprite.k_up at \'%s\'' % (
+                        inspect.stack()[1][1].split('/')[-1],
+                        inspect.stack()[1][0])
+                        )
 
     @property
     def MAX_FORWARD_SPEED(self):
