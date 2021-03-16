@@ -106,11 +106,17 @@ class Game:
             else:
                 self.stop()
 
-            self.car.k_right = self.car.k_left = self.car.k_up = self.car.k_down = 0
-
+            ### car control
             if wrap:
+                ### get control data from input file
                 if self.win_condition is None:
                     self.parse_input(input_file)
+            else:
+                ## get control from database control object
+                self.car.speed_variation = self.database.control.speed_variation()
+                self.car.dir_variation   = self.database.control.direction_variation()
+                ## clear control after each reading
+                self.database.control.reset()
 
             events = pygame.event.get()
             for event in events:
@@ -185,16 +191,16 @@ class Game:
                     break
                 if not hasattr(event, 'key'):
                     continue
-                down = event.type == KEYDOWN
+                keydown = event.type == KEYDOWN
                 if self.win_condition is None:
                     if event.key == K_RIGHT:
-                        self.car.k_right = down * -5
+                        self.car.dir_variation = keydown * -5
                     elif event.key == K_LEFT:
-                        self.car.k_left = down * 5
+                        self.car.dir_variation = keydown * 5
                     elif event.key == K_UP:
-                        self.car.k_up = down * 2
+                        self.car.speed_variation = keydown * 2
                     elif event.key == K_DOWN:
-                        self.car.k_down = down * -2
+                        self.car.speed_variation = keydown * -2
                     elif event.key == K_ESCAPE:
                         self.close()
                 elif self.win_condition is True and event.key == K_SPACE:
@@ -227,10 +233,7 @@ class Game:
             self.win_condition = False
             self.car_update = False
             self.car.image = pygame.image.load('images/collision.png')
-            self.car.MAX_FORWARD_SPEED = 0
-            self.car.MAX_REVERSE_SPEED = 0
-            self.car.k_right = 0
-            self.car.k_left = 0
+            self.car.stop()
 
         for checkpoint in self.checkpoint_group:
             if pygame.sprite.spritecollide(checkpoint, self.car_group, False, False):
@@ -247,8 +250,7 @@ class Game:
         if finish_collision != {}:
             self.win_condition = True
             self.car_update = False
-            self.car.MAX_FORWARD_SPEED = 0
-            self.car.MAX_REVERSE_SPEED = 0
+            self.car.stop()
 
         self.wall_group.update()
         self.checkpoint_group.update()
@@ -287,17 +289,17 @@ class Game:
             try:
                 cmd = next(commands)
                 if cmd == "up":
-                    for i in range(int(next(commands))):
-                        self.car.k_up += 1
+                    for _ in range(int(next(commands))):
+                        self.car.speed_variation += 1
                 if cmd == "down":
-                    for i in range(int(next(commands))):
-                        self.car.k_down -= 1
+                    for _ in range(int(next(commands))):
+                        self.car.speed_variation -= 1
                 if cmd == "right":
-                    for i in range(int(next(commands))):
-                        self.car.k_right -= 1
+                    for _ in range(int(next(commands))):
+                        self.car.dir_variation -= 1
                 if cmd == "left":
-                    for i in range(int(next(commands))):
-                        self.car.k_left += 1
+                    for _ in range(int(next(commands))):
+                        self.car.dir_variation += 1
             except StopIteration:
                 print("No more commands")
                 break

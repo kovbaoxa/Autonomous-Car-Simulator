@@ -39,13 +39,8 @@ class Brain:
             # Car data
             print("Direction: {} - Speed: {}".format(self.getCarDirection(), self.getCarSpeed()))
 
-            if self.getCarSpeed() <= 5:
-                self.up(1)
-
-            if(self.getCarDirection() > 0):
-                self.right(1)
-            else:
-                self.left(1)
+            if self.getCarSpeed() < 5:
+                self.faster(1)
 
             ####################################################################
             # to HERE!!
@@ -58,23 +53,23 @@ class Brain:
     # CAR CONTROL
     ####################################################################
 
-    def up(self, num: int = 1):
-        self.database.control.up(num)
+    def faster(self, val: int = 5):
+        self.database.control.faster(val)
 
-    def down(self, num: int = 1):
-        self.database.control.down(num)
+    def slower(self, val: int = 5):
+        self.database.control.slower(val)
 
-    def right(self, num: int = 1):
-        self.database.control.right(num)
+    def right(self, val: int = 8):
+        self.database.control.right(val)
 
-    def left(self, num: int = 1):
-        self.database.control.left(num)
+    def left(self, val: int = 8):
+        self.database.control.left(val)
 
     ####################################################################
-    # SIMULATION INFO
+    # CAR SENSORS
     ####################################################################
-    def isRunning(self):
-        return not self.database.stop
+    def getCarPosition(self):
+        return self.database.car.position
 
     def getCarSpeed(self):
         return self.database.car.speed
@@ -82,11 +77,17 @@ class Brain:
     def getCarDirection(self):
         return self.database.car.direction
 
+    def getLidarData(self):
+        return self.database.lidar.data
+
+    ####################################################################
+    # SIMULATION INFO
+    ####################################################################
+    def isRunning(self):
+        return not self.database.stop
+
     def getRunTime(self):
         return self.database.run_time
 
     def getRunDistance(self):
         return self.database.run_dist
-
-    def getLidarData(self):
-        return self.database.lidar.data
