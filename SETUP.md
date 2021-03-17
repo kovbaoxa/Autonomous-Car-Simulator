@@ -11,6 +11,6 @@
 
 4. After the installation is completed, open a terminal (_e.g._ Command Prompt) and  navigate to the project directory (_e.g._ `cd C:\Projects\Autonomous-Car-Simulator\`)
 5. Type in or paste `pip install -r requirements.txt` and hit enter
-6. Once the dependencies are done installing, while in the same directory run `python main.py`
+6. Once the dependencies are done installing, run `python main.py`
 
 ![](/images/setup/cmd.PNG)
