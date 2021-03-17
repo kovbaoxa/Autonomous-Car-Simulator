@@ -45,7 +45,7 @@ class Game:
         self.checkpoint_group = pygame.sprite.RenderPlain(*checkpoints)
         self.finish_group = pygame.sprite.RenderPlain(*finish_line)
         ### - Text
-        self.font = pygame.font.Font(None, 24)
+        self.font = pygame.font.Font(None, 22)
 
         ### TIMING
         self.clock = pygame.time.Clock()
@@ -94,6 +94,9 @@ class Game:
                 bcv.wait(self.frame_duration)
 
             if self.win_condition is None:
+                ### update timestamp
+                self.database.timestamp += 1
+
                 ### update running time
                 self.database.run_time += self.simulation_step
 
@@ -131,9 +134,6 @@ class Game:
             with cv:
                 cv.notifyAll()
 
-            ### update timestamp
-            self.database.timestamp += 1
-
             exec_time = time.time() - start_time
 
             if(exec_time < self.frame_duration):
@@ -162,6 +162,9 @@ class Game:
             self.clock.tick_busy_loop(30)
 
             if self.win_condition is None:
+                ### update timestamp
+                self.database.timestamp += 1
+
                 ### update running time
                 self.database.run_time += self.clock.get_time()
 
@@ -213,7 +216,7 @@ class Game:
         if self.car_update:
             self.car_group.update()
         
-        self.draw_hud(self.database.run_time, self.database.run_dist, self.win_condition)
+        self.draw_hud(self.database.car.speed, self.car.position, self.database.run_time, self.database.timestamp, self.database.run_dist, self.win_condition)
 
         collisions = pygame.sprite.groupcollide(
             self.car_group, self.wall_group, False, False, collided=None)
@@ -248,25 +251,37 @@ class Game:
         self.finish_group.draw(self.screen)
         self.car_group.draw(self.screen)
 
-    def draw_hud(self, millisec, distance, win):
+    def draw_hud(self, speed, pos, millisec, frame, distance, win):
         if self.hud_pos is not None:
             if win is None:
-                time_overlay = self.font.render("Čas: {:.03f}".format(millisec/1000.0), True, (255, 255, 255))
-                dist_overlay = self.font.render("Vzdálenost: {:.1f}".format(distance), True, (255, 255, 255))
+                gps_overlay   = self.font.render("GPS: ({}, {})".format(int(pos[0]), int(pos[1])), True, (255, 255, 255))
+                speed_overlay = self.font.render("Rychlost: {}".format(speed), True, (255, 255, 255))
+                time_overlay  = self.font.render("Čas: {:.03f} ({})".format(millisec/1000.0, frame), True, (255, 255, 255))
+                dist_overlay  = self.font.render("Vzdálenost: {:.1f}".format(distance), True, (255, 255, 255))
             else:
                 if win:
-                    time_overlay = self.font.render("Čas: {:.03f}".format(millisec/1000.0), True, (0, 255, 0))
-                    dist_overlay = self.font.render("Vzdálenost: {:.1f}".format(distance), True, (0, 255, 0))
+                    gps_overlay   = self.font.render("GPS: ({}, {})".format(int(pos[0]), int(pos[1])), True, (0, 255, 0))
+                    speed_overlay = self.font.render("Rychlost: {}".format(speed), True, (0, 255, 0))
+                    time_overlay  = self.font.render("Čas: {:.03f} ({})".format(millisec/1000.0, frame), True, (0, 255, 0))
+                    dist_overlay  = self.font.render("Vzdálenost: {:.1f}".format(distance), True, (0, 255, 0))
                 else:
-                    time_overlay = self.font.render("Čas: {:.03f}".format(millisec/1000.0), True, (255, 0, 0))
-                    dist_overlay = self.font.render("Vzdálenost: {:.1f}".format(distance), True, (255, 0, 0))
+                    gps_overlay   = self.font.render("GPS: ({}, {})".format(int(pos[0]), int(pos[1])), True, (255, 0, 0))
+                    speed_overlay = self.font.render("Rychlost: {}".format(speed), True, (255, 0, 0))
+                    time_overlay  = self.font.render("Čas: {:.03f} ({})".format(millisec/1000.0, frame), True, (255, 0, 0))
+                    dist_overlay  = self.font.render("Vzdálenost: {:.1f}".format(distance), True, (255, 0, 0))
 
-            time_overlay_rect = time_overlay.get_rect()
-            dist_overlay_rect = dist_overlay.get_rect()
+            gps_overlay_rect   = gps_overlay.get_rect()
+            speed_overlay_rect = speed_overlay.get_rect()
+            time_overlay_rect  = time_overlay.get_rect()
+            dist_overlay_rect  = dist_overlay.get_rect()
 
-            time_overlay_rect.center = (self.hud_pos[0], self.hud_pos[1])
-            dist_overlay_rect.center = (self.hud_pos[0], self.hud_pos[1] + 50)
+            gps_overlay_rect.center   = (self.hud_pos[0], self.hud_pos[1] - 100)
+            speed_overlay_rect.center = (self.hud_pos[0], self.hud_pos[1] - 50)
+            time_overlay_rect.center  = (self.hud_pos[0], self.hud_pos[1])
+            dist_overlay_rect.center  = (self.hud_pos[0], self.hud_pos[1] + 50)
 
+            self.screen.blit(gps_overlay, gps_overlay_rect)
+            self.screen.blit(speed_overlay, speed_overlay_rect)
             self.screen.blit(time_overlay, time_overlay_rect)
             self.screen.blit(dist_overlay, dist_overlay_rect)
 
