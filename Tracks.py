@@ -33,26 +33,26 @@ Map0 = (
 
 Map1 = (
     [
-        WallSprite((500, 0), 1000, 4),
-        WallSprite((500, 800), 1000, 4),
-        WallSprite((0, 400), 4, 800),
-        WallSprite((1000, 400), 4, 800),
-        WallSprite((400, 400), 4, 800),
-        WallSprite((600, 450), 4, 700),
-        WallSprite((540, 650), 120, 4),
-        WallSprite((540, 450), 120, 4),
-        WallSprite((540, 300), 120, 4),
-        WallSprite((540, 100), 120, 4),
-        WallSprite((460, 200), 120, 4),
-        WallSprite((460, 375), 120, 4),
-        WallSprite((460, 550), 120, 4),
+        WallSprite((500, 100), 800, 4), # H top
+        WallSprite((500, 500), 800, 4), # H bottom
+        WallSprite((100, 300), 4, 400), # V left
+        WallSprite((900, 300), 4, 400), # V right
+
+        WallSprite((500, 250), 500, 4), # H top
+        WallSprite((500, 350), 500, 4), # H bottom
+        WallSprite((250, 300), 4, 100), # V left
+        WallSprite((750, 300), 4, 100), # V right
+
     ],
     [
+        CheckpointSprite((175, 300), 150, 1, "Checkpoint 1"),
+        CheckpointSprite((450, 175), 1, 150, "Checkpoint 2"),
+        CheckpointSprite((825, 300), 150, 1, "Checkpoint 3")
     ],
     [
-        FinishLineSprite((590, 50), 96, True)
+        FinishLineSprite((550, 425), 150, True)
     ],
-    CarSprite('images/car.png', (500, 760)),
+    CarSprite('images/car.png', (500, 425), 90),
     (850, 700)
 )
 
@@ -60,18 +60,21 @@ Map2 = (
     [
         WallSprite((500, 0), 1000, 4),
         WallSprite((500, 800), 1000, 4),
-        WallSprite((0, 400), 4, 800),
-        WallSprite((1000, 450), 4, 700),
-        WallSprite((120, 450), 4, 700),
-        WallSprite((360, 450), 4, 700),
-        WallSprite((600, 450), 4, 700),
-        WallSprite((840, 450), 4, 700),
         WallSprite((920, 100), 160, 4),
+        WallSprite((0, 400), 4, 800),
+        WallSprite((120, 450), 4, 700),
         WallSprite((240, 350), 4, 700),
-        WallSprite((480, 350), 4, 700),
+        WallSprite((360, 450), 4, 700),
+        WallSprite((480, 350), 4, 700),        
+        WallSprite((600, 450), 4, 700),
         WallSprite((720, 350), 4, 700),
+        WallSprite((840, 450), 4, 700),
+        WallSprite((1000, 450), 4, 700),
     ],
     [
+        CheckpointSprite((180, 300), 120, 1, "Checkpoint 1"),
+        CheckpointSprite((420, 300), 120, 1, "Checkpoint 2"),
+        CheckpointSprite((660, 300), 120, 1, "Checkpoint 3")
     ],
     [
         FinishLineSprite((990, 50), 96, True)
@@ -81,39 +84,6 @@ Map2 = (
 )
 
 Map3 = (
-    [
-        WallSprite((500, 0), 1000, 4),
-        WallSprite((160, 800), 320, 4),
-        WallSprite((720, 800), 560, 4),
-        WallSprite((0, 400), 4, 800),
-        WallSprite((1000, 400), 4, 800),
-        WallSprite((560, 600), 4, 400),
-        WallSprite((560, 150), 4, 300),
-        WallSprite((620, 350), 4, 100),
-        WallSprite((590, 300), 60, 4),
-        WallSprite((590, 400), 60, 4),
-        WallSprite((440, 460), 4, 720),
-        WallSprite((320, 100), 4, 200),
-        WallSprite((320, 100), 4, 200),
-        WallSprite((320, 680), 4, 240),
-        WallSprite((320, 340), 4, 160),
-        WallSprite((220, 230), 4, 60),
-        WallSprite((270, 200), 100, 4),
-        WallSprite((270, 260), 100, 4),
-        WallSprite((220, 490), 4, 140),
-        WallSprite((270, 420), 100, 4),
-        WallSprite((270, 560), 100, 4),
-    ],
-    [
-    ],
-    [
-        FinishLineSprite((380, 790), 120)
-    ],
-    CarSprite('images/car.png', (500, 760)),
-    (850, 700)
-)
-
-Map4 = (
     [
         WallSprite((500, 0), 1000, 4),
         WallSprite((500, 800), 1000, 4),
@@ -136,6 +106,10 @@ Map4 = (
         WallSprite((470, 570), 4, 60),
     ],
     [
+        CheckpointSprite((150, 300), 100, 1, "Checkpoint 1"),
+        CheckpointSprite((850, 300), 100, 1, "Checkpoint 2"),
+        CheckpointSprite((600, 650), 1, 100, "Checkpoint 3"),
+        CheckpointSprite((400, 650), 1, 100, "Checkpoint 4"),
     ],
     [
         FinishLineSprite((500, 50), 96, True)

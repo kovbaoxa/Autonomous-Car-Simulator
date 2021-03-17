@@ -6,7 +6,7 @@ import pygame
 
 from Brain import Brain
 from Control import Control
-from Tracks import Map0, Map1, Map2, Map3, Map4
+from Tracks import Map0, Map1, Map2, Map3
 from Database import Database
 from Game import Game
 from LiDAR import LiDAR
@@ -20,7 +20,7 @@ g_sync_cv = threading.Condition()
 g_brain_cv = threading.Condition()
 
 def main(auto, wrap, map_idx):
-    map_list = [Map0, Map1, Map2, Map3, Map4]
+    map_list = [Map0, Map1, Map2, Map3]
     if map_idx not in range(len(map_list)):
         print("Invalid map index")
         return
