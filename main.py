@@ -20,7 +20,7 @@ g_sync_cv = threading.Condition()
 #   minimum framerate
 g_brain_cv = threading.Condition()
 
-def main(auto, wrap, map_idx):
+def main(auto, map_idx):
     map_list = [Map0, Map1, Map2, Map3]
     if map_idx not in range(len(map_list)):
         print("Invalid map index")
@@ -31,13 +31,11 @@ def main(auto, wrap, map_idx):
     lidar = LiDAR()
     control = Control()
     database = Database(lidar, control, car)
-    # Get LiDAR data, Set Control data
-    brain = Brain(database) if not cmd_file else TimeEventBrain(database)
-    # Get Control data Set LiDAR data
     game = Game(walls, checkpoints, finish_line, car, database, hud_pos=hud_pos)
 
     brain_thread = None
-    if auto:
+    if auto is not None:
+        brain = Brain(database) if auto == "advanced" else  TimeEventBrain(database)
         brain_thread = threading.Thread(target=brain.run, args=(g_sync_cv, g_brain_cv,))
         brain_thread.start()
 
@@ -79,11 +77,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
             "-a", "--auto",
-            help="Do not use your keyboard command,\
-                 but use pre-defined brain's command.",
-            action="store_true",
-            default=False
-            # type=bool
+            help="Use brain function to drive the car. "\
+                "Choose between 'simple' (time based) and 'advanced'",
+            action="store",
+            default=None
         )
     parser.add_argument(
             "-m", "--map",
@@ -91,12 +88,5 @@ if __name__ == "__main__":
             action="store",
             default=0
         )
-    parser.add_argument(
-            "-f", "--file",
-            help="Do not use your keyboard command,\
-                 but use input.txt file to control the car.",
-            action="store_true",
-            default=False
-        )
     args = parser.parse_args()
-    main(args.auto, int(args.map), args.file)
+    main(args.auto, int(args.map))
