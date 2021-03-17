@@ -72,12 +72,9 @@ class Game:
         self.database.stop = True
         time.sleep(0.2)
 
-    def runAuto(self, wrap=False, cv=None, bcv=None):
+    def runAuto(self, cv=None, bcv=None):
 
         print("Running at {:.0f} fps".format(1.0/self.frame_duration))
-
-        output_file = open("output.txt", "w")
-        input_file = open("input.txt", "r")
 
         ### Init running time and running speed
         self.database.runTime = 0.0
@@ -107,16 +104,10 @@ class Game:
                 self.stop()
 
             ### car control
-            if wrap:
-                ### get control data from input file
-                if self.win_condition is None:
-                    self.parse_input(input_file)
-            else:
-                ## get control from database control object
-                self.car.speed_variation = self.database.control.speed_variation()
-                self.car.dir_variation   = self.database.control.direction_variation()
-                ## clear control after each reading
-                self.database.control.reset()
+            self.car.speed_variation = self.database.control.speed_variation()
+            self.car.dir_variation   = self.database.control.direction_variation()
+            ## clear control after each reading
+            self.database.control.reset()
 
             events = pygame.event.get()
             for event in events:
@@ -136,21 +127,18 @@ class Game:
             pygame.display.flip()
 
             self.make_lidar_data()
-            
-            # write to output file
-            for s in self.database.lidar.data.tolist():
-                output_file.write("%.1f " % s)
-            output_file.write("\n\n")
 
             with cv:
                 cv.notifyAll()
-        
+
+            ### update timestamp
+            self.database.timestamp += 1
+
             exec_time = time.time() - start_time
 
             if(exec_time < self.frame_duration):
                 time.sleep(self.frame_duration - exec_time)
-                
-        output_file.close()
+
         self.stop()
 
         return self.win_condition, self.database.run_time, self.database.run_dist, self.database.checkpoint_time
@@ -281,28 +269,6 @@ class Game:
 
             self.screen.blit(time_overlay, time_overlay_rect)
             self.screen.blit(dist_overlay, dist_overlay_rect)
-
-
-    def parse_input(self, file):
-        commands = iter(file.read().split())        
-        while True:
-            try:
-                cmd = next(commands)
-                if cmd == "up":
-                    for _ in range(int(next(commands))):
-                        self.car.speed_variation += 1
-                if cmd == "down":
-                    for _ in range(int(next(commands))):
-                        self.car.speed_variation -= 1
-                if cmd == "right":
-                    for _ in range(int(next(commands))):
-                        self.car.dir_variation -= 1
-                if cmd == "left":
-                    for _ in range(int(next(commands))):
-                        self.car.dir_variation += 1
-            except StopIteration:
-                print("No more commands")
-                break
 
     def make_lidar_data(self):
         lidar_data = np.zeros((360))

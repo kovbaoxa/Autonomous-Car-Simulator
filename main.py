@@ -5,6 +5,7 @@ import threading
 import pygame
 
 from Brain import Brain
+from TimeEventBrain import TimeEventBrain
 from Control import Control
 from Tracks import Map0, Map1, Map2, Map3
 from Database import Database
@@ -31,7 +32,7 @@ def main(auto, wrap, map_idx):
     control = Control()
     database = Database(lidar, control, car)
     # Get LiDAR data, Set Control data
-    brain = Brain(database)
+    brain = Brain(database) if not cmd_file else TimeEventBrain(database)
     # Get Control data Set LiDAR data
     game = Game(walls, checkpoints, finish_line, car, database, hud_pos=hud_pos)
 
@@ -40,13 +41,13 @@ def main(auto, wrap, map_idx):
         brain_thread = threading.Thread(target=brain.run, args=(g_sync_cv, g_brain_cv,))
         brain_thread.start()
 
-    res_win  = None
-    res_time = None
-    res_dist = None
+    res_win  = None # win condition status
+    res_time = None # total time
+    res_dist = None # total distance
     res_ckpt = None # checkpoints
 
     if auto:
-        res_win, res_time, res_dist, res_ckpt = game.runAuto(wrap=wrap, cv=g_sync_cv, bcv=g_brain_cv)
+        res_win, res_time, res_dist, res_ckpt = game.runAuto(cv=g_sync_cv, bcv=g_brain_cv)
     else:
         res_win, res_time, res_dist, res_ckpt = game.runManual()
 
@@ -91,10 +92,11 @@ if __name__ == "__main__":
             default=0
         )
     parser.add_argument(
-            "--wrap",
+            "-f", "--file",
             help="Do not use your keyboard command,\
-                 but use input.txt file.",
-            action="store_true", default=False
+                 but use input.txt file to control the car.",
+            action="store_true",
+            default=False
         )
     args = parser.parse_args()
-    main(args.auto, args.wrap, int(args.map))
+    main(args.auto, int(args.map), args.file)
