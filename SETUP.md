@@ -3,8 +3,8 @@
 ## Windows
 
 1. Download the Python v3.8.5 installer file:
-    - [x86](https://www.python.org/ftp/python/3.8.5/python-3.8.5.exe)
-    - [x86_64](https://www.python.org/ftp/python/3.8.5/python-3.8.5-amd64.exe)
+    - [32bit](https://www.python.org/ftp/python/3.8.5/python-3.8.5.exe)
+    - [64bit](https://www.python.org/ftp/python/3.8.5/python-3.8.5-amd64.exe)
 2. Run the installer file &mdash; when the install wizard window pops up, make sure to check "Add Python 3.8 to PATH" and click "Install Now"
 
 ![](/images/setup/py-installer.PNG)
