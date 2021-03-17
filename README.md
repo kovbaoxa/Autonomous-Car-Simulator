@@ -11,11 +11,12 @@
 pip install -r requirements.txt
 ```
 
-### Usage/Spuštění
+### Use/Spuštění
 
 #### Auto
 
 (EN) Drive with your own algorithm which is implemented at `Brain.py`.
+
 (CZ) Ovládání auta programem napsaným v souboru `Brain.py`.
 ```
 python main.py --auto
@@ -24,6 +25,7 @@ python main.py --auto
 #### Manual
 
 (EN) Drive with Keyboard.
+
 (CZ) Ovládání klávesnicí.
 
 ```
@@ -33,6 +35,7 @@ python main.py
 #### Maps/Mapy
 
 (EN) Choose one of the available maps.
+
 (CZ) Vyberte si jednu z nabízených map.
 
 ```
@@ -47,6 +50,7 @@ __Example/Ukázka__:
 ### LiDAR
 
 (EN) Participants receive virtual LiDAR and GPS data.
+
 (CZ) Účastníci mají k dispozici virtuální LiDAR a GPS souřadnice.
 
 ![LiDAR_preview.png](https://github.com/x2ever/Autonomous-Car-Simulator/blob/master/images/LiDAR_preview.png)
