@@ -1,49 +1,82 @@
 import time
 import pygame
+import math
 
 class Brain:
     def __init__(self, database):
         self.database = database
 
     def run(self, cv=None, bcv=None):
+    
+        ######################################################################
+        # ZAČÁTEK BLOKU
+        # V tomto bloku můžete inicializovat proměnné mimo cyklus
+        ######################################################################
+        
+        # my_amazing_var = 0
+        # my_regular_var = 0
+
+        ######################################################################
+        # KONEC BLOKU
+        ######################################################################
+    
         while self.isRunning():
             with cv:
                 cv.wait()
 
             '''
-            DO NOT CHANGE CODE ABOVE!!!!
+            1. Jak ovládat auto?
 
-            1. How can i get a lidar data?
-                data = self.database.lidar.data
+                Funkce pro zrychlení auta s volitelným parametrem "num".
+                Num musí být v rozsahu 0-5. Pokud není "num" specifikován, 
+                použije se výchozí hodnota 5.
+                
+                self.faster(num)
 
-            2. How can i move a car?
-                self.up(num)
-                self.down(num)
+                Funkce pro zpomalení auta s volitelným parametrem "num".
+                Num musí být v rozsahu 0-5. Pokud není "num" specifikován, 
+                použije se výchozí hodnota 5.
+
+                self.slower(num)
+
+                Funkce pro zatočení doprava s volitelným parametrem "num".
+                Num musí být v rozsahu 0-10. Pokud není "num" specifikován, 
+                použije se výchozí hodnota 10°.
+
                 self.right(num)
+
+                Funkce pro zatočení doleva s volitelným parametrem "num".
+                Num musí být v rozsahu 0-10. Pokud není "num" specifikován, 
+                použije se výchozí hodnota 10°.
+
                 self.left(num)
 
-                In one loop, you can only change the speed up to 5 and the angle up to 8
 
-            3. How can i get a car status data?
+            2. Jak přistupovat k informacím o autě?
+
+                Rychlost auta v rozsahu [0-15]:
                 self.getCarSpeed()
+                
+                Data z lidaru na autě uložená v poli délky 180 prvků v rozsahu [0-300]:
+                self.getLidarData()
+
+                Natočení auta v rozsahu [0-360°]:
                 self.getCarDirection()
+                
+                Souřadnice auta uložené ve struktuře tuple:
+                self.getCarPosition()
 
             '''
             ####################################################################
-            # Implement Your Algorithm form HERE...
+            # ZAČÁTEK BLOKU
+            # Zde implementujte váš algoritmus
             ####################################################################
 
-            # Simulation data
-            print("Time: {:.3f} - Distance: {:.1f}".format(self.getRunTime() / 1000.0, self.getRunDistance()))
-
-            # Car data
-            print("Direction: {} - Speed: {}".format(self.getCarDirection(), self.getCarSpeed()))
-
-            if self.getCarSpeed() < 5:
-                self.faster(1)
+            # Nahradit vaším programem
+            self.faster(2)
 
             ####################################################################
-            # to HERE!!
+            # KONEC BLOKU
             ####################################################################
 
             with bcv:
@@ -59,10 +92,10 @@ class Brain:
     def slower(self, val: int = 5):
         self.database.control.slower(val)
 
-    def right(self, val: int = 8):
+    def right(self, val: int = 10):
         self.database.control.right(val)
 
-    def left(self, val: int = 8):
+    def left(self, val: int = 10):
         self.database.control.left(val)
 
     ####################################################################

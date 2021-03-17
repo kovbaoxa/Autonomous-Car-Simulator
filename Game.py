@@ -263,15 +263,15 @@ class Game:
     def draw_hud(self, millisec, distance, win):
         if self.hud_pos is not None:
             if win is None:
-                time_overlay = self.font.render("Time: {:.03f}".format(millisec/1000.0), True, (255, 255, 255))
-                dist_overlay = self.font.render("Dist: {:.1f}".format(distance), True, (255, 255, 255))
+                time_overlay = self.font.render("Čas: {:.03f}".format(millisec/1000.0), True, (255, 255, 255))
+                dist_overlay = self.font.render("Vzdálenost: {:.1f}".format(distance), True, (255, 255, 255))
             else:
                 if win:
-                    time_overlay = self.font.render("Time: {:.03f}".format(millisec/1000.0), True, (0, 255, 0))
-                    dist_overlay = self.font.render("Dist: {:.1f}".format(distance), True, (0, 255, 0))
+                    time_overlay = self.font.render("Čas: {:.03f}".format(millisec/1000.0), True, (0, 255, 0))
+                    dist_overlay = self.font.render("Vzdálenost: {:.1f}".format(distance), True, (0, 255, 0))
                 else:
-                    time_overlay = self.font.render("Time: {:.03f}".format(millisec/1000.0), True, (255, 0, 0))
-                    dist_overlay = self.font.render("Dist: {:.1f}".format(distance), True, (255, 0, 0))
+                    time_overlay = self.font.render("Čas: {:.03f}".format(millisec/1000.0), True, (255, 0, 0))
+                    dist_overlay = self.font.render("Vzdálenost: {:.1f}".format(distance), True, (255, 0, 0))
 
             time_overlay_rect = time_overlay.get_rect()
             dist_overlay_rect = dist_overlay.get_rect()

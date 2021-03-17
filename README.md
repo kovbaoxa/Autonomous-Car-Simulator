@@ -1,6 +1,7 @@
-## Autonomous Car Simulator
+## Autonomous Car Simulator/ Simulátor autonomního auta (EN/CZ)
 
-### Dependencies
+
+### Dependencies/Potřebný SW
 
 - Python 3
 - numpy
@@ -10,43 +11,45 @@
 pip install -r requirements.txt
 ```
 
-### Usage
+### Usage/Spuštění
 
 #### Auto
 
-Drive with your own algorithm which is implemented at `Brain.py`.
+(EN) Drive with your own algorithm which is implemented at `Brain.py`.
+(CZ) Ovládání auta programem napsaným v souboru `Brain.py`.
 ```
 python main.py --auto
 ```
 
-#### Not auto
+#### Manual
 
-Drive with Keyboard.
+(EN) Drive with Keyboard.
+(CZ) Ovládání klávesnicí.
 
 ```
 python main.py
 ```
 
-#### Maps
+#### Maps/Mapy
 
-Choose one of the available maps
+(EN) Choose one of the available maps.
+(CZ) Vyberte si jednu z nabízených map.
 
 ```
-python main.py --maps <0-4>
+python main.py --maps <0-3>
 ```
 
-### Credit
-driving club ThinKingo (see the source of the fork)
-
-__Results__:
+__Example/Ukázka__:
 
 ![Team1](https://github.com/x2ever/Autonomous-Car-Simulator/blob/master/images/1팀.gif)
 
 
 ### LiDAR
 
-Participants receive virtual LiDAR and GPS data.
+(EN) Participants receive virtual LiDAR and GPS data.
+(CZ) Účastníci mají k dispozici virtuální LiDAR a GPS souřadnice.
 
 ![LiDAR_preview.png](https://github.com/x2ever/Autonomous-Car-Simulator/blob/master/images/LiDAR_preview.png)
 
-![level1](https://github.com/x2ever/Autonomous-Car-Simulator/blob/master/images/level1.png)
+### Credit/Zásluhy
+driving club ThinKingo (see the source of the fork)

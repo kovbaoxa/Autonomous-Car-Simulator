@@ -86,7 +86,7 @@ if __name__ == "__main__":
         )
     parser.add_argument(
             "-m", "--map",
-            help="Choose which map to run [options 0 - 4]",
+            help="Choose which map to run [options 0 - 3]",
             action="store",
             default=0
         )
