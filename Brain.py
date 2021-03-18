@@ -119,6 +119,9 @@ class Brain:
     def isRunning(self):
         return not self.database.stop
 
+    def getTimestamp(self):
+        return self.database.timestamp
+
     def getRunTime(self):
         return self.database.run_time
 
