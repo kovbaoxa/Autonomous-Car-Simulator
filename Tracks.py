@@ -21,8 +21,8 @@ Map0 = (
         WallSprite((550, 400), 4, 600), # V right
     ],
     [
-        CheckpointSprite((500, 500), 100, 1, "Checkpoint 1"),
-        CheckpointSprite((500, 300), 100, 1, "Checkpoint 2")
+        CheckpointSprite("Checkpoint 1", (500, 500), 100, 1),
+        CheckpointSprite("Checkpoint 2", (500, 300), 100, 1)
     ],
     [
         FinishLineSprite((500, 150), 100)
@@ -45,9 +45,9 @@ Map1 = (
 
     ],
     [
-        CheckpointSprite((175, 300), 150, 1, "Checkpoint 1"),
-        CheckpointSprite((450, 175), 1, 150, "Checkpoint 2"),
-        CheckpointSprite((825, 300), 150, 1, "Checkpoint 3")
+        CheckpointSprite("Checkpoint 1", (175, 300), 150, 1),
+        CheckpointSprite("Checkpoint 2", (450, 175), 150, 1, True),
+        CheckpointSprite("Checkpoint 3", (825, 300), 150, 1)
     ],
     [
         FinishLineSprite((550, 425), 150, True)
@@ -72,9 +72,9 @@ Map2 = (
         WallSprite((1000, 450), 4, 700),
     ],
     [
-        CheckpointSprite((180, 300), 120, 1, "Checkpoint 1"),
-        CheckpointSprite((420, 300), 120, 1, "Checkpoint 2"),
-        CheckpointSprite((660, 300), 120, 1, "Checkpoint 3")
+        CheckpointSprite("Checkpoint 1", (180, 300), 120, 1),
+        CheckpointSprite("Checkpoint 2", (420, 300), 120, 1),
+        CheckpointSprite("Checkpoint 3", (660, 300), 120, 1)
     ],
     [
         FinishLineSprite((990, 50), 96, True)
@@ -106,10 +106,10 @@ Map3 = (
         WallSprite((470, 570), 4, 60),
     ],
     [
-        CheckpointSprite((150, 300), 100, 1, "Checkpoint 1"),
-        CheckpointSprite((850, 300), 100, 1, "Checkpoint 2"),
-        CheckpointSprite((600, 650), 1, 100, "Checkpoint 3"),
-        CheckpointSprite((400, 650), 1, 100, "Checkpoint 4"),
+        CheckpointSprite("Checkpoint 1", (150, 300), 100, 1),
+        CheckpointSprite("Checkpoint 2", (850, 300), 100, 1),
+        CheckpointSprite("Checkpoint 3", (600, 650), 100, 1, True),
+        CheckpointSprite("Checkpoint 4", (400, 650), 100, 1, True),
     ],
     [
         FinishLineSprite((500, 50), 96, True)
