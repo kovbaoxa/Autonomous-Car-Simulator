@@ -3,13 +3,9 @@
 
 ### Dependencies/Potřebný SW
 
-- Python 3
-- numpy
-- pygame
+(EN) Described in file SETUP.md
 
-```
-pip install -r requirements.txt
-```
+(CZ) Potřebné info najdete v souboru SETUP.md
 
 ### Use/Spuštění
 
