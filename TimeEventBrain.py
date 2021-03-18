@@ -10,8 +10,9 @@ class TimeEventBrain:
     def run(self, cv=None, bcv=None):
         with open("input.txt") as input_commands:
             for line in input_commands:
-                # discard comment lines
-                if line.startswith('#'):
+                # discard comment lines or empty lines
+                line = line.rstrip('\n')
+                if not line or line.startswith('#'):
                     continue
                 self.parse_input(line)
 
