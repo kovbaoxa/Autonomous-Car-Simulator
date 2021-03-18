@@ -19,7 +19,7 @@ pip install -r requirements.txt
 
 (CZ) Ovládání auta programem napsaným v souboru `Brain.py`.
 ```
-python main.py --auto
+python main.py --auto <simple|advanced>
 ```
 
 #### Manual
