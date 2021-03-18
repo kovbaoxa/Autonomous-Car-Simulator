@@ -2,7 +2,7 @@ import inspect
 import sys
 import platform
 
-from Authority import AuthorityExecption
+from src.Authority import AuthorityExecption
 
 
 class LiDAR:

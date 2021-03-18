@@ -3,9 +3,10 @@ import math
 import inspect
 import sys
 import platform
-
-from Authority import AuthorityExecption
 from numpy import sqrt
+
+from src.Authority import AuthorityExecption
+
 
 class CarSprite(pygame.sprite.Sprite):
     __MAX_FORWARD_SPEED   = 15

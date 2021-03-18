@@ -1,16 +1,16 @@
 import argparse
 import os
 import threading
-
 import pygame
 
 from Brain import Brain
-from TimeEventBrain import TimeEventBrain
-from Control import Control
-from Tracks import Map0, Map1, Map2, Map3
-from Database import Database
-from Game import Game
-from LiDAR import LiDAR
+from src.TimeEventBrain import TimeEventBrain
+from src.Control import Control
+from src.Tracks import Map0, Map1, Map2, Map3
+from src.Database import Database
+from src.Game import Game
+from src.LiDAR import LiDAR
+
 
 # game thread notifies brain as soon as the LiDAR data is ready
 g_sync_cv = threading.Condition()

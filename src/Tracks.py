@@ -1,10 +1,11 @@
-from Wall import WallSprite
-from Checkpoint import CheckpointSprite
-from Car import CarSprite
-from Trophy import TrophySprite
-from FinishLine import FinishLineSprite
-
 import numpy as np
+
+from src.Wall import WallSprite
+from src.Checkpoint import CheckpointSprite
+from src.Car import CarSprite
+from src.Trophy import TrophySprite
+from src.FinishLine import FinishLineSprite
+
 
 ### Format: a map is a tuple composed of the following fields
 ### - a list of WallSprites which delimit the track

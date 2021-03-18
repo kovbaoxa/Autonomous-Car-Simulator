@@ -1,15 +1,15 @@
 import copy
 import math
 import time
-
 import numpy as np
 import pygame
 from pygame.locals import (K_DOWN, K_ESCAPE, K_LEFT, K_RIGHT, K_SPACE, K_UP,
                            KEYDOWN, USEREVENT)
 
-from Car import CarSprite
-from Trophy import TrophySprite
-from Wall import WallSprite
+from src.Car import CarSprite
+from src.Trophy import TrophySprite
+from src.Wall import WallSprite
+
 
 # default frame duration in seconds
 DFT_FRAME_DURATION = 0.0333

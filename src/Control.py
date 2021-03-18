@@ -1,5 +1,6 @@
 import pygame
 
+
 class Control:
     __MAX_SPEED_VARIATION = 5
     __MAX_TURNING_ANGLE   = 10
