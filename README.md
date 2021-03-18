@@ -19,10 +19,13 @@
     - [64bit](https://www.python.org/ftp/python/3.8.5/python-3.8.5-amd64.exe)
 2. Spusťte instalační soubor &mdash; při otevření okna zaškrtněte "Add Python 3.8 to PATH" a pokračujte tlačítkem "Install Now"
 ![](/images/setup/py-installer.PNG "Python installer")
-3. Stáhněte si tento repozitář
-4. Oteřete terminál ("cmd" nebo-li "Command Prompt") a navigujte pomocí příkazu  `ls` do složky s repozitářem
-5. Do terminálu napište/zkopírujte příkaz `pip install -r requirements.txt`
-6. Pro spuštění programu do terminálu napište/zkopírujte příkaz `python main.py`
+3. Stáhněte si tento repozitář a extrahujte jeho obsah
+
+![](/images/setup/git.PNG "Stáhnutí git repa")
+
+4. Oteřete si složku s repozitářem
+5. Spusťte program *install.bat*
+6. Pro spuštění programu spusťte program *start.bat*
 
 ![](/images/setup/cmd.PNG "Příkazy")
 ![](/images/setup/pygame-window.PNG "Okno hry")
@@ -47,6 +50,7 @@
     - [32bit](https://www.python.org/ftp/python/3.8.5/python-3.8.5.exe)
     - [64bit](https://www.python.org/ftp/python/3.8.5/python-3.8.5-amd64.exe)
 2. Run the installer file &mdash; when the install wizard window pops up, make sure to check "Add Python 3.8 to PATH" and click "Install Now"
-3. After the installation is completed, open a terminal (_e.g._ Command Prompt) and  navigate to the project directory (_e.g._ `cd C:\Projects\Autonomous-Car-Simulator\`)
-4. Type in or paste `pip install -r requirements.txt` into the terminal and hit enter
-5. Once the dependencies are done installing, run `python main.py` to test that the environment is set up successfully; a separate window hosting an instance of the game should show up
+3. Download this repository
+4. Open the directory where you downloaded and extracted the repository
+5. Run the program *install.bat*
+6. Run the program *start.bat* to test that the environment is set up successfully; a separate window hosting an instance of the game should show up
