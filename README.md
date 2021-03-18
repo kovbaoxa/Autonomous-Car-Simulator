@@ -1,59 +1,52 @@
-## Autonomous Car Simulator/ Simulátor autonomního auta (EN/CZ)
+
+# [CZ] Instalační návod
+
+## Varianta *vím co dělám*
+
+1. Nainstalujte si Python 3
+2. Stáhněte si knihovnu pygame
+3. Stáhněte si knihovnu numpy
+4. Stáhněte si tento repozitář
+5. Spusťte příkazovou řádku a přejděte do složky repozitáře
+6. Spusťte program příkazem `python main.py`
+
+## Varianta *krok za krokem*
+
+### Windows
+
+1. Stáhněte si instalační soubor Python verze 3.8.5
+    - [32bit](https://www.python.org/ftp/python/3.8.5/python-3.8.5.exe)
+    - [64bit](https://www.python.org/ftp/python/3.8.5/python-3.8.5-amd64.exe)
+2. Spusťte instalační soubor &mdash; při otevření okna zaškrtněte "Add Python 3.8 to PATH" a pokračujte tlačítkem "Install Now"
+![](/images/setup/py-installer.PNG "Python installer")
+3. Stáhněte si tento repozitář
+4. Oteřete terminál ("cmd" nebo-li "Command Prompt") a navigujte pomocí příkazu  `ls` do složky s repozitářem
+5. Do terminálu napište/zkopírujte příkaz `pip install -r requirements.txt`
+6. Pro spuštění programu do terminálu napište/zkopírujte příkaz `python main.py`
+
+![](/images/setup/cmd.PNG "Příkazy")
+![](/images/setup/pygame-window.PNG "Okno hry")
+
+# [EN] Environment setup guide
+
+## Variant *I know what I am doing*
+
+1. Install Python 3
+2. Install pygame
+3. Install numpy
+4. Clone this repository
+5. Open `cmd` and navigate to the folder
+6. Execute the command `python main.py`
 
 
-### Dependencies/Potřebný SW
+## Variant *step by step*
 
-- Python 3
-- numpy
-- pygame
+### Windows
 
-```
-pip install -r requirements.txt
-```
-
-### Use/Spuštění
-
-#### Auto
-
-(EN) Drive with your own algorithm which is implemented at `Brain.py`.
-
-(CZ) Ovládání auta programem napsaným v souboru `Brain.py`.
-```
-python main.py --auto
-```
-
-#### Manual
-
-(EN) Drive with Keyboard.
-
-(CZ) Ovládání klávesnicí.
-
-```
-python main.py
-```
-
-#### Maps/Mapy
-
-(EN) Choose one of the available maps.
-
-(CZ) Vyberte si jednu z nabízených map.
-
-```
-python main.py --maps <0-3>
-```
-
-__Example/Ukázka__:
-
-![Team1](https://github.com/x2ever/Autonomous-Car-Simulator/blob/master/images/1팀.gif)
-
-
-### LiDAR
-
-(EN) Participants receive virtual LiDAR and GPS data.
-
-(CZ) Účastníci mají k dispozici virtuální LiDAR a GPS souřadnice.
-
-![LiDAR_preview.png](https://github.com/x2ever/Autonomous-Car-Simulator/blob/master/images/LiDAR_preview.png)
-
-### Credit/Zásluhy
-driving club ThinKingo (see the source of the fork)
+1. Download the Python v3.8.5 installer file:
+    - [32bit](https://www.python.org/ftp/python/3.8.5/python-3.8.5.exe)
+    - [64bit](https://www.python.org/ftp/python/3.8.5/python-3.8.5-amd64.exe)
+2. Run the installer file &mdash; when the install wizard window pops up, make sure to check "Add Python 3.8 to PATH" and click "Install Now"
+3. After the installation is completed, open a terminal (_e.g._ Command Prompt) and  navigate to the project directory (_e.g._ `cd C:\Projects\Autonomous-Car-Simulator\`)
+4. Type in or paste `pip install -r requirements.txt` into the terminal and hit enter
+5. Once the dependencies are done installing, run `python main.py` to test that the environment is set up successfully; a separate window hosting an instance of the game should show up

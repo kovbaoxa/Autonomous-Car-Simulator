@@ -19,7 +19,7 @@ MAX_FRAME_DURATION = 0.5
 DFT_SIM_DELTA_TIME = 0.0333
 
 class Game:
-    def __init__(self, walls, checkpoints, finish_line, car, database,
+    def __init__(self, walls, finish_line, car, database,
                  frame_duration = DFT_FRAME_DURATION,
                  sim_delta      = DFT_SIM_DELTA_TIME,
                  hud_pos        = (850, 700)
@@ -27,7 +27,6 @@ class Game:
         self.init_args =\
             [
                 copy.copy(walls),
-                copy.copy(checkpoints),
                 copy.copy(car),
                 database
             ]
@@ -42,7 +41,6 @@ class Game:
         ### - Groups
         self.car_group = pygame.sprite.RenderPlain(car)
         self.wall_group = pygame.sprite.RenderPlain(*walls)
-        self.checkpoint_group = pygame.sprite.RenderPlain(*checkpoints)
         self.finish_group = pygame.sprite.RenderPlain(*finish_line)
         ### - Text
         self.font = pygame.font.Font(None, 22)
@@ -72,84 +70,12 @@ class Game:
         self.database.stop = True
         time.sleep(0.2)
 
-    def runAuto(self, cv=None, bcv=None):
-
-        print("Running at {:.0f} fps".format(1.0/self.frame_duration))
-
-        ### Init running time and running speed
-        self.database.runTime = 0.0
-        self.database.run_dist = 0.0
-        self.database.checkpoint_time = dict()
-
-        # Getting car initial position
-        car_current_pos = self.car.position
-
-        # Start simulation
-        self.running = True
-
-        while self.running:
-            start_time = time.time()
-
-            with bcv:
-                bcv.wait(self.frame_duration)
-
-            if self.win_condition is None:
-                ### update timestamp
-                self.database.timestamp += 1
-
-                ### update running time
-                self.database.run_time += self.simulation_step
-
-                ### update running distance
-                self.database.run_dist += self.car.distance_from(car_current_pos)
-                car_current_pos = self.car.position
-            else:
-                self.stop()
-
-            ### car control
-            self.car.speed_variation = self.database.control.speed_variation()
-            self.car.dir_variation   = self.database.control.direction_variation()
-            ## clear control after each reading
-            self.database.control.reset()
-
-            events = pygame.event.get()
-            for event in events:
-                if event.type == pygame.QUIT:
-                    self.close()
-                    break
-                if not hasattr(event, 'key'):
-                    continue
-                if event.key == K_ESCAPE:
-                    self.close()
-                elif event.key == K_SPACE and self.win_condition is not None:
-                    self.close()
-
-            # RENDERING
-            self.render()
-            # Counter Render
-            pygame.display.flip()
-
-            self.make_lidar_data()
-
-            with cv:
-                cv.notifyAll()
-
-            exec_time = time.time() - start_time
-
-            if(exec_time < self.frame_duration):
-                time.sleep(self.frame_duration - exec_time)
-
-        self.stop()
-
-        return self.win_condition, self.database.run_time, self.database.run_dist, self.database.checkpoint_time
-    
     def runManual(self):
         print("Running at {:.0f} fps".format(1.0/self.frame_duration))
 
         ### Init running time and running speed
         self.database.runTime = 0.0
         self.database.run_dist = 0.0
-        self.database.checkpoint_time = dict()
 
         # Getting car initial position
         car_current_pos = self.car.position
@@ -209,7 +135,7 @@ class Game:
 
         self.stop()
 
-        return self.win_condition, self.database.run_time, self.database.run_dist, self.database.checkpoint_time
+        return self.win_condition, self.database.run_time, self.database.run_dist
 
     def render(self):
         self.screen.fill((0, 0, 0))
@@ -226,11 +152,6 @@ class Game:
             self.car.image = pygame.image.load('images/collision.png')
             self.car.stop()
 
-        for checkpoint in self.checkpoint_group:
-            if pygame.sprite.spritecollide(checkpoint, self.car_group, False, False):
-                if checkpoint.name not in self.database.checkpoint_time.keys():
-                    self.database.checkpoint_time[checkpoint.name] = {"distance" : self.database.run_dist, "time" : self.database.run_time}
-
         finish_collision = pygame.sprite.groupcollide(
                 self.car_group,
                 self.finish_group,
@@ -244,10 +165,8 @@ class Game:
             self.car.stop()
 
         self.wall_group.update()
-        self.checkpoint_group.update()
 
         self.wall_group.draw(self.screen)
-        self.checkpoint_group.draw(self.screen)
         self.finish_group.draw(self.screen)
         self.car_group.draw(self.screen)
 

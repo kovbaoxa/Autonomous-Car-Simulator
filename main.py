@@ -4,10 +4,8 @@ import threading
 
 import pygame
 
-from Brain import Brain
-from TimeEventBrain import TimeEventBrain
 from Control import Control
-from Tracks import Map0, Map1, Map2, Map3
+from Tracks import Map0
 from Database import Database
 from Game import Game
 from LiDAR import LiDAR
@@ -20,37 +18,20 @@ g_sync_cv = threading.Condition()
 #   minimum framerate
 g_brain_cv = threading.Condition()
 
-def main(auto, map_idx):
-    map_list = [Map0, Map1, Map2, Map3]
-    if map_idx not in range(len(map_list)):
-        print("Invalid map index")
-        return
+def main():
 
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (500, 30)
-    walls, checkpoints, finish_line, car, hud_pos = map_list[map_idx]
+    walls, finish_line, car, hud_pos = Map0
     lidar = LiDAR()
     control = Control()
     database = Database(lidar, control, car)
-    game = Game(walls, checkpoints, finish_line, car, database, hud_pos=hud_pos)
-
-    brain_thread = None
-    if auto is not None:
-        brain = Brain(database) if auto == "advanced" else  TimeEventBrain(database)
-        brain_thread = threading.Thread(target=brain.run, args=(g_sync_cv, g_brain_cv,))
-        brain_thread.start()
+    game = Game(walls, finish_line, car, database, hud_pos=hud_pos)
 
     res_win  = None # win condition status
     res_time = None # total time
     res_dist = None # total distance
-    res_ckpt = None # checkpoints
 
-    if auto:
-        res_win, res_time, res_dist, res_ckpt = game.runAuto(cv=g_sync_cv, bcv=g_brain_cv)
-    else:
-        res_win, res_time, res_dist, res_ckpt = game.runManual()
-
-    if brain_thread is not None:
-        brain_thread.join()
+    res_win, res_time, res_dist = game.runManual()
 
     if res_win is not None:
         if res_win:
@@ -61,10 +42,7 @@ def main(auto, map_idx):
         print("### REPORT ###")
         print("Running time: {:.3f}".format(res_time / 1000.0))
         print("Running dist: {:.1f}".format(res_dist))
-        if res_ckpt.items():
-            print("Checkpoints:")
-            for k, v in res_ckpt.items():
-                print("- {} : time {:.03f} - dist: {:.1f}".format(k, v["time"] / 1000.0, v["distance"]))
+
     else:
         print("Exit")
 
@@ -74,19 +52,4 @@ def main(auto, map_idx):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-            "-a", "--auto",
-            help="Use brain function to drive the car. "\
-                "Choose between 'simple' (time based) and 'advanced'",
-            action="store",
-            default=None
-        )
-    parser.add_argument(
-            "-m", "--map",
-            help="Choose which map to run [options 0 - 3]",
-            action="store",
-            default=0
-        )
-    args = parser.parse_args()
-    main(args.auto, int(args.map))
+    main()

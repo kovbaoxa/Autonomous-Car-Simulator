@@ -1,9 +1,0 @@
-# all commands are in the format
-# <timestamp> - <command> <value>
-# available commands:
-# faster <0-5>
-# slower <0-5>
-# left   <0-10>
-# right  <0-10>
-
-1 - faster 5
