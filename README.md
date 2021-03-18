@@ -39,7 +39,7 @@ python main.py
 (CZ) Vyberte si jednu z nabízených map.
 
 ```
-python main.py --maps <0-3>
+python main.py --map <0-3>
 ```
 
 __Example/Ukázka__:
