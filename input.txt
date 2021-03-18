@@ -1,9 +1,20 @@
-# all commands are in the format
-# <timestamp> - <command> <value>
-# available commands:
-# faster <0-5>
-# slower <0-5>
-# left   <0-10>
-# right  <0-10>
+# (CZ) Tento dokument slouží pro "manuální" ovládání auta v simulátoru.
+# (CZ) Seznam příkazů a jejich použití naleznete na konci bloku komentářů.
+# (CZ) Všechny příkazy dodržují formát <časová značka> - <příkaz> <hodnota>
+#
+# (EN) This file contains "manual" control of the car simulator.
+# (EN) All commands are in the format <timestamp> - <command> <value>
+# (EN) available commands:
+#
+# (CZ) příkaz 	<hodnota> význam
+#      faster 	<0-5>	  zrychlení
+#      slower 	<0-5>     zpomalení
+#      left   	<0-10>    zatočení doleva
+#      right  	<0-10>    zatočení doprava
+
+# (CZ) Příklad
+# (EN) Example
 
 1 - faster 5
+2 - slower 5
+3 - faster 10
