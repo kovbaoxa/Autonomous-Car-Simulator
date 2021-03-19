@@ -17,4 +17,7 @@
 
 1 - faster 5
 2 - slower 5
-3 - faster 10
+3 - faster 2
+24 - left 10
+30 - right 10
+35 - faster 4
