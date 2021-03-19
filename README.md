@@ -38,6 +38,16 @@ python main.py
 python main.py --map <0-3>
 ```
 
+#### Cmd line examples/ Spouštění aplikace z příkazové řádky
+
+```
+python main.py --auto simple --map 1
+python main.py --auto advanced --map 1
+python main.py --auto advanced --map 2
+python main.py --auto advanced --map 3
+```
+
+
 __Example/Ukázka__:
 
 ![Team1](https://github.com/x2ever/Autonomous-Car-Simulator/blob/master/images/1팀.gif)
