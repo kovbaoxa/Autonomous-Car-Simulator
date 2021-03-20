@@ -3,9 +3,9 @@
 
 ### Dependencies/Potřebný SW
 
-(EN) Described in file SETUP.md
+(EN) Described in file SETUP.md (spoiler alert: Python 3, numpy and pygame)
 
-(CZ) Potřebné info najdete v souboru SETUP.md
+(CZ) Potřebné info najdete v souboru SETUP.md (spiler: Python3, numpy a pygame)
 
 ### Use/Spuštění
 
