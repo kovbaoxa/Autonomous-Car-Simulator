@@ -4,12 +4,13 @@ import numpy as np
 
 
 class TimeEventBrain:
-    def __init__(self, database):
+    def __init__(self, database, infile = "input.txt"):
         self.database = database
         self.command_queue = dict()
+        self.infile = infile
 
     def run(self, cv=None, bcv=None):
-        with open("input.txt") as input_commands:
+        with open(self.infile) as input_commands:
             for line in input_commands:
                 # discard comment lines or empty lines
                 line = line.rstrip('\n')
