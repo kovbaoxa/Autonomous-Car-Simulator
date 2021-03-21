@@ -52,7 +52,7 @@ Map1 = (
         CheckpointSprite("Checkpoint 3", (825, 300), 150, 1)
     ],
     [
-        FinishLineSprite((550, 425), 150, True)
+        FinishLineSprite((550, 425), 144, True)
     ],
     [
         Rock('images/rock.png', (300, 425))
