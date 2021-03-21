@@ -18,12 +18,15 @@ DFT_FRAME_DURATION = 0.0333
 MAX_FRAME_DURATION = 0.5
 # default simulation time
 DFT_SIM_DELTA_TIME = 0.0333
+# max game duration (in ms)
+MAX_GAME_DURATION  = 100000.0
 
 class Game:
     def __init__(self, walls, checkpoints, finish_line, rocks, car, database,
                  frame_duration = DFT_FRAME_DURATION,
                  sim_delta      = DFT_SIM_DELTA_TIME,
-                 hud_pos        = (850, 700)
+                 hud_pos        = (850, 700),
+                 close_at_end   = False
         ):
         self.init_args =\
             [
@@ -57,6 +60,7 @@ class Game:
         self.running = False
         self.car_update = True
         self.win_condition = None
+        self.close_at_end = close_at_end
         # frame duration in secs (can't be more than MAX_FRAME_DURATION)
         self.frame_duration = frame_duration if frame_duration <= MAX_FRAME_DURATION else MAX_FRAME_DURATION
         # simulation step duration in ms
@@ -69,6 +73,10 @@ class Game:
 
     def close(self):
         self.stop()
+        self.car_group.empty()
+        self.wall_group.empty()
+        self.checkpoint_group.empty()
+        self.finish_group.empty()
         self.running = False
 
     def stop(self):
@@ -96,18 +104,24 @@ class Game:
             with bcv:
                 bcv.wait(self.frame_duration)
 
-            if self.win_condition is None:
-                ### update timestamp
-                self.database.timestamp += 1
-
-                ### update running time
-                self.database.run_time += self.simulation_step
-
-                ### update running distance
-                self.database.run_dist += self.car.distance_from(car_current_pos)
-                car_current_pos = self.car.position
+            if self.database.run_time >= MAX_GAME_DURATION:
+                self.close()
             else:
-                self.stop()
+                if self.win_condition is None:
+                    ### update timestamp
+                    self.database.timestamp += 1
+
+                    ### update running time
+                    self.database.run_time += self.simulation_step
+
+                    ### update running distance
+                    self.database.run_dist += self.car.distance_from(car_current_pos)
+                    car_current_pos = self.car.position
+                else:
+                    if self.close_at_end:
+                        self.close()
+                    else:
+                        self.stop()
 
             ### car control
             self.car.speed_variation = self.database.control.speed_variation()
@@ -144,6 +158,8 @@ class Game:
 
         self.stop()
 
+        pygame.quit()
+
         return self.win_condition, self.database.run_time, self.database.run_dist, self.database.checkpoint_time
     
     def runManual(self):
@@ -164,17 +180,24 @@ class Game:
             ### generate new frame
             self.clock.tick_busy_loop(30)
 
-            if self.win_condition is None:
-                ### update timestamp
-                self.database.timestamp += 1
-                ### update running time
-                self.database.run_time += self.clock.get_time()
-
-                ### update running distance
-                self.database.run_dist += self.car.distance_from(car_current_pos)
-                car_current_pos = self.car.position
+            if self.database.run_time >= MAX_GAME_DURATION:
+                self.close()
             else:
-                self.stop()
+                if self.win_condition is None:
+                    ### update timestamp
+                    self.database.timestamp += 1
+
+                    ### update running time
+                    self.database.run_time += self.simulation_step
+
+                    ### update running distance
+                    self.database.run_dist += self.car.distance_from(car_current_pos)
+                    car_current_pos = self.car.position
+                else:
+                    if self.close_at_end:
+                        self.close()
+                    else:
+                        self.stop()
 
             events = pygame.event.get()
 
@@ -210,6 +233,8 @@ class Game:
             self.make_lidar_data()
 
         self.stop()
+
+        pygame.quit()
 
         return self.win_condition, self.database.run_time, self.database.run_dist, self.database.checkpoint_time
 
@@ -284,8 +309,8 @@ class Game:
             time_overlay_rect.center  = (self.hud_pos[0], self.hud_pos[1])
             dist_overlay_rect.center  = (self.hud_pos[0], self.hud_pos[1] + 50)
 
-            #self.screen.blit(gps_overlay, gps_overlay_rect)
-            #self.screen.blit(speed_overlay, speed_overlay_rect)
+            # self.screen.blit(gps_overlay, gps_overlay_rect)
+            # self.screen.blit(speed_overlay, speed_overlay_rect)
             self.screen.blit(time_overlay, time_overlay_rect)
             self.screen.blit(dist_overlay, dist_overlay_rect)
 
