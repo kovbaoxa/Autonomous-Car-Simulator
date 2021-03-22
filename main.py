@@ -6,7 +6,7 @@ import pygame
 from Brain import Brain
 from src.TimeEventBrain import TimeEventBrain
 from src.Control import Control
-from src.Tracks import Map0, Map1, Map2, Map3
+from src.Tracks import Map0, Map1, Map2, Map3, Map4, Map5
 from src.Database import Database
 from src.Game import Game
 from src.LiDAR import LiDAR
@@ -21,17 +21,17 @@ g_sync_cv = threading.Condition()
 g_brain_cv = threading.Condition()
 
 def main(auto, map_idx):
-    map_list = [Map0, Map1, Map2, Map3]
+    map_list = [Map0, Map1, Map2, Map3, Map4, Map5]
     if map_idx not in range(len(map_list)):
         print("Invalid map index")
         return
 
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (500, 30)
-    walls, checkpoints, finish_line, car, hud_pos = map_list[map_idx]
+    walls, checkpoints, finish_line, rocks, car, hud_pos = map_list[map_idx]
     lidar = LiDAR()
     control = Control()
     database = Database(lidar, control, car)
-    game = Game(walls, checkpoints, finish_line, car, database, hud_pos=hud_pos)
+    game = Game(walls, checkpoints, finish_line, rocks, car, database, hud_pos=hud_pos)
 
     brain_thread = None
     if auto is not None:

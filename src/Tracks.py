@@ -5,6 +5,7 @@ from src.Checkpoint import CheckpointSprite
 from src.Car import CarSprite
 from src.Trophy import TrophySprite
 from src.FinishLine import FinishLineSprite
+from src.Rock import Rock
 
 
 ### Format: a map is a tuple composed of the following fields
@@ -53,6 +54,9 @@ Map1 = (
     [
         FinishLineSprite((550, 425), 150, True)
     ],
+    [
+        Rock('images/rock.png', (300, 425))
+    ],
     CarSprite('images/car.png', (500, 425), 90),
     (850, 700)
 )
@@ -78,7 +82,9 @@ Map2 = (
         CheckpointSprite("Checkpoint 3", (660, 300), 120, 1)
     ],
     [
-        FinishLineSprite((990, 50), 96, True)
+        FinishLineSprite((850, 50), 96, True)
+    ],
+    [
     ],
     CarSprite('images/car.png', (60, 750)),
     (910, 700)
@@ -115,6 +121,42 @@ Map3 = (
     [
         FinishLineSprite((500, 50), 96, True)
     ],
+    [
+    ],
     CarSprite('images/car.png', (500, 760)),
     (850, 725)
+)
+
+Map4 = (
+    [
+
+
+    ],
+    [
+
+    ],
+    [
+
+    ],
+    [
+    ],
+    CarSprite('images/car.png', (500, 425), 90),
+    (850, 700)
+)
+
+Map5 = (
+    [
+
+
+    ],
+    [
+
+    ],
+    [
+
+    ],
+    [
+    ],
+    CarSprite('images/car.png', (500, 425), 90),
+    (850, 700)
 )

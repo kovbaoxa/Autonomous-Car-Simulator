@@ -9,6 +9,7 @@ from pygame.locals import (K_DOWN, K_ESCAPE, K_LEFT, K_RIGHT, K_SPACE, K_UP,
 from src.Car import CarSprite
 from src.Trophy import TrophySprite
 from src.Wall import WallSprite
+from src.Rock import Rock
 
 
 # default frame duration in seconds
@@ -19,7 +20,7 @@ MAX_FRAME_DURATION = 0.5
 DFT_SIM_DELTA_TIME = 0.0333
 
 class Game:
-    def __init__(self, walls, checkpoints, finish_line, car, database,
+    def __init__(self, walls, checkpoints, finish_line, rocks, car, database,
                  frame_duration = DFT_FRAME_DURATION,
                  sim_delta      = DFT_SIM_DELTA_TIME,
                  hud_pos        = (850, 700)
@@ -28,6 +29,7 @@ class Game:
             [
                 copy.copy(walls),
                 copy.copy(checkpoints),
+                copy.copy(rocks),
                 copy.copy(car),
                 database
             ]
@@ -44,6 +46,7 @@ class Game:
         self.wall_group = pygame.sprite.RenderPlain(*walls)
         self.checkpoint_group = pygame.sprite.RenderPlain(*checkpoints)
         self.finish_group = pygame.sprite.RenderPlain(*finish_line)
+        self.rocks_group = pygame.sprite.RenderPlain(*rocks)
         ### - Text
         self.font = pygame.font.Font(None, 22)
 
@@ -164,7 +167,6 @@ class Game:
             if self.win_condition is None:
                 ### update timestamp
                 self.database.timestamp += 1
-
                 ### update running time
                 self.database.run_time += self.clock.get_time()
 
@@ -218,9 +220,9 @@ class Game:
         
         self.draw_hud(self.database.car.speed, self.car.position, self.database.run_time, self.database.timestamp, self.database.run_dist, self.win_condition)
 
-        collisions = pygame.sprite.groupcollide(
-            self.car_group, self.wall_group, False, False, collided=None)
-        if collisions != {}:
+        collisions = pygame.sprite.groupcollide(self.car_group, self.wall_group, False, False, collided=None)
+        stuck_on_rock = pygame.sprite.groupcollide(self.car_group, self.rocks_group, False, False, collided=None)
+        if collisions != {} or stuck_on_rock != {}:
             self.win_condition = False
             self.car_update = False
             self.car.image = pygame.image.load('images/collision.png')
@@ -245,10 +247,12 @@ class Game:
 
         self.wall_group.update()
         self.checkpoint_group.update()
+        self.rocks_group.update()
 
         self.wall_group.draw(self.screen)
         self.checkpoint_group.draw(self.screen)
         self.finish_group.draw(self.screen)
+        self.rocks_group.draw(self.screen)
         self.car_group.draw(self.screen)
 
     def draw_hud(self, speed, pos, millisec, frame, distance, win):
@@ -280,8 +284,8 @@ class Game:
             time_overlay_rect.center  = (self.hud_pos[0], self.hud_pos[1])
             dist_overlay_rect.center  = (self.hud_pos[0], self.hud_pos[1] + 50)
 
-            self.screen.blit(gps_overlay, gps_overlay_rect)
-            self.screen.blit(speed_overlay, speed_overlay_rect)
+            #self.screen.blit(gps_overlay, gps_overlay_rect)
+            #self.screen.blit(speed_overlay, speed_overlay_rect)
             self.screen.blit(time_overlay, time_overlay_rect)
             self.screen.blit(dist_overlay, dist_overlay_rect)
 
