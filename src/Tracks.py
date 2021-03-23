@@ -29,6 +29,8 @@ Map0 = (
     [
         FinishLineSprite((500, 150), 100)
     ],
+    [
+    ],
     CarSprite('images/car.png', (500, 650)),
     (850, 700)
 )
@@ -55,7 +57,6 @@ Map1 = (
         FinishLineSprite((550, 425), 144, True)
     ],
     [
-        Rock('images/rock.png', (300, 425))
     ],
     CarSprite('images/car.png', (500, 425), 90),
     (850, 700)
@@ -129,16 +130,27 @@ Map3 = (
 
 Map4 = (
     [
+        WallSprite((500, 100), 800, 4), # H top
+        WallSprite((500, 500), 800, 4), # H bottom
+        WallSprite((100, 300), 4, 400), # V left
+        WallSprite((900, 300), 4, 400), # V right
 
+        WallSprite((500, 250), 500, 4), # H top
+        WallSprite((500, 350), 500, 4), # H bottom
+        WallSprite((250, 300), 4, 100), # V left
+        WallSprite((750, 300), 4, 100), # V right
 
     ],
     [
-
+        CheckpointSprite("Checkpoint 1", (175, 300), 150, 1),
+        CheckpointSprite("Checkpoint 2", (450, 175), 150, 1, True),
+        CheckpointSprite("Checkpoint 3", (825, 300), 150, 1)
     ],
     [
-
+        FinishLineSprite((550, 425), 144, True)
     ],
     [
+        Rock('images/rock.png', (300, 425))
     ],
     CarSprite('images/car.png', (500, 425), 90),
     (850, 700)

@@ -41,7 +41,7 @@ class Game:
         ### GRAPHIC OBJECTS
         ### - Surfaces
         self.screen = pygame.display.set_mode((1000, 800))
-        self.rect = self.screen.get_rect()
+        self.collision_layer = pygame.surface.Surface((1000, 800))
         ### - Sprites
         self.car = car
         ### - Groups
@@ -75,6 +75,7 @@ class Game:
         self.stop()
         self.car_group.empty()
         self.wall_group.empty()
+        self.rocks_group.empty()
         self.checkpoint_group.empty()
         self.finish_group.empty()
         self.running = False
@@ -239,7 +240,10 @@ class Game:
         return self.win_condition, self.database.run_time, self.database.run_dist, self.database.checkpoint_time
 
     def render(self):
+        ### reset surfaces
         self.screen.fill((0, 0, 0))
+        self.collision_layer.fill((0, 0, 0))
+
         if self.car_update:
             self.car_group.update()
         
@@ -280,6 +284,10 @@ class Game:
         self.rocks_group.draw(self.screen)
         self.car_group.draw(self.screen)
 
+        # add objects which must be visible to LiDAR to this surface
+        self.wall_group.draw(self.collision_layer)
+        self.rocks_group.draw(self.collision_layer)
+
     def draw_hud(self, speed, pos, millisec, frame, distance, win):
         if self.hud_pos is not None:
             if win is None:
@@ -309,15 +317,15 @@ class Game:
             time_overlay_rect.center  = (self.hud_pos[0], self.hud_pos[1])
             dist_overlay_rect.center  = (self.hud_pos[0], self.hud_pos[1] + 50)
 
-            # self.screen.blit(gps_overlay, gps_overlay_rect)
-            # self.screen.blit(speed_overlay, speed_overlay_rect)
+            self.screen.blit(gps_overlay, gps_overlay_rect)
+            self.screen.blit(speed_overlay, speed_overlay_rect)
             self.screen.blit(time_overlay, time_overlay_rect)
             self.screen.blit(dist_overlay, dist_overlay_rect)
 
     def make_lidar_data(self):
         lidar_data = np.zeros((360))
         L = 300
-        array = pygame.surfarray.array3d(self.screen)
+        array = pygame.surfarray.array3d(self.collision_layer)
         car = self.car
         x, y = car.position
 
@@ -336,7 +344,7 @@ class Game:
                     x = x
                     y -= 1
                     try:
-                        if (array[int(x)][int(y)] == 255).all():
+                        if (array[int(x)][int(y)] > 10).all():
                             break
                     except IndexError:
                         break
@@ -345,7 +353,7 @@ class Game:
                     y -= 1
                     x = (m) * (y - lidar_y) + lidar_x
                     try:
-                        if (array[int(x)][int(y)] == 255).all():
+                        if (array[int(x)][int(y)] > 10).all():
                             break
                     except IndexError:
                         break
@@ -354,7 +362,7 @@ class Game:
                     x -= 1
                     y = (1 / m) * (x - lidar_x) + lidar_y
                     try:
-                        if (array[int(x)][int(y)] == 255).all():
+                        if (array[int(x)][int(y)] > 10).all():
                             break
                     except IndexError:
                         break
@@ -363,7 +371,7 @@ class Game:
                     x -= 1
                     y = y
                     try:
-                        if (array[int(x)][int(y)] == 255).all():
+                        if (array[int(x)][int(y)] > 10).all():
                             break
                     except IndexError:
                         break
@@ -372,7 +380,7 @@ class Game:
                     y += 1
                     x = (m) * (y - lidar_y) + lidar_x
                     try:
-                        if (array[int(x)][int(y)] == 255).all():
+                        if (array[int(x)][int(y)] > 10).all():
                             break
                     except IndexError:
                         break
@@ -381,7 +389,7 @@ class Game:
                     x = x
                     y += 1
                     try:
-                        if (array[int(x)][int(y)] == 255).all():
+                        if (array[int(x)][int(y)] > 10).all():
                             break
                     except IndexError:
                         break
@@ -390,7 +398,7 @@ class Game:
                     x += 1
                     y = (1 / m) * (x - lidar_x) + lidar_y
                     try:
-                        if (array[int(x)][int(y)] == 255).all():
+                        if (array[int(x)][int(y)] > 10).all():
                             break
                     except IndexError:
                         break
@@ -399,7 +407,7 @@ class Game:
                     x += 1
                     y = y
                     try:
-                        if (array[int(x)][int(y)] == 255).all():
+                        if (array[int(x)][int(y)] > 10).all():
                             break
                     except IndexError:
                         break
