@@ -91,21 +91,38 @@ def test_case(test_name, map_idx, mode, brain_module, infile):
 
     print("### Test {}: Map {} - Mode {}".format(test_name, test_data["map"], test_data["mode"]))
 
-    if test_data["brain"] is not None:
-        res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
-        test_data["complete"] = res_win is True
-        test_data["time"] = "{:.03f}".format(res_time / 1000.0)
-        test_data["dist"] = "{:.1f}".format(res_dist)
-        test_data["ckpt"] = list()
-        for k, v in res_ckpt.items():
-            test_data["ckpt"].append({
-                "name" : k,
-                "time" : "{:.03f}".format(v["time"] / 1000.0),
-                "dist" : "{:.1f}".format(v["distance"]),
-            })
-        print("### - Done")
-    else:
-        print("### - Skipped")
+    if test_data["mode"] == "simple":
+        if test_data["infile"] is not None:
+            res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
+            test_data["complete"] = res_win is True
+            test_data["time"] = "{:.03f}".format(res_time / 1000.0)
+            test_data["dist"] = "{:.1f}".format(res_dist)
+            test_data["ckpt"] = list()
+            for k, v in res_ckpt.items():
+                test_data["ckpt"].append({
+                    "name" : k,
+                    "time" : "{:.03f}".format(v["time"] / 1000.0),
+                    "dist" : "{:.1f}".format(v["distance"]),
+                })
+            print("### - Done")
+        else:
+            print("### - Skipped")
+    elif test_data["mode"] == "advanced":
+        if test_data["brain"] is not None:
+            res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
+            test_data["complete"] = res_win is True
+            test_data["time"] = "{:.03f}".format(res_time / 1000.0)
+            test_data["dist"] = "{:.1f}".format(res_dist)
+            test_data["ckpt"] = list()
+            for k, v in res_ckpt.items():
+                test_data["ckpt"].append({
+                    "name" : k,
+                    "time" : "{:.03f}".format(v["time"] / 1000.0),
+                    "dist" : "{:.1f}".format(v["distance"]),
+                })
+            print("### - Done")
+        else:
+            print("### - Skipped")
     
     return test_data
 
