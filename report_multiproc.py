@@ -120,7 +120,6 @@ def run_test(test_name, map_idx, mode, submission_dir_path, participant, module_
     
     test_results_json = json.dumps(test_data, indent=4, cls=customEnc)
     test_results_queue.put(test_results_json)
-    return test_data
 
 def run_tests(submission_dir_path, participant):
     input_file_path = None
