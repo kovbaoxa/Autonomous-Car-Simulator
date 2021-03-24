@@ -5,6 +5,7 @@ import importlib
 import os
 import threading
 import time
+import platform
 import pygame
 import sys
 
@@ -15,7 +16,6 @@ from src.Tracks import Map0, Map1, Map2, Map3, Map4, Map5
 from src.Database import Database
 from src.Game import Game
 from src.LiDAR import LiDAR
-from multiprocessing import Process
 
 
 # game thread notifies brain as soon as the LiDAR data is ready
@@ -31,55 +31,50 @@ def main(folder):
     result_struct = dict()
 
     for i, participant in enumerate(sorted(os.listdir(folder))):
-        p = Process(target=process_results, args=(folder, result_struct, i, participant))
-        p.start()
+        result_struct[participant] = list()
+
+        print("################################################################")
+        print("### Evaluation of participant {} ({} of {})".format(participant, i + 1, len(os.listdir(folder))))
+        print("################################################################")
+
+        input_file     = None
+        brain_module_1 = None
+        brain_module_2 = None
+
+        if os.path.exists(os.path.join(folder, participant, "input.txt")):
+            input_file = os.path.join(folder, participant, "input.txt")
+        else:
+            print("### - Could not find input file")
+        if os.path.exists(os.path.join(folder, participant, "Brain_1.py")):
+            brain_module_1 = importlib.import_module(folder + '.' + participant + ".Brain_1")
+        else:
+            print("### - Could not find brain module 1")
+        if os.path.exists(os.path.join(folder, participant, "Brain_2.py")):
+            brain_module_2 = importlib.import_module(folder + '.' + participant + ".Brain_2")
+        else:
+            print("### - Could not find brain module 2")
+
+        print("################################################################")
+
+        result_struct[participant].append(test_case("t1", 1, "simple", None, input_file))
+        time.sleep(2)
+        result_struct[participant].append(test_case("t2", 1, "advanced", brain_module_1, None))
+        time.sleep(2)
+        result_struct[participant].append(test_case("t3", 1, "advanced", brain_module_2, None))
+        time.sleep(2)
+        result_struct[participant].append(test_case("t4", 2, "advanced", brain_module_2, None))
+        time.sleep(2)
+        result_struct[participant].append(test_case("t5", 3, "advanced", brain_module_2, None))
+        time.sleep(2)
+        result_struct[participant].append(test_case("t6", 4, "advanced", brain_module_2, None))
+        time.sleep(2)
+        result_struct[participant].append(test_case("t7", 5, "advanced", brain_module_2, None))
+        time.sleep(2)
 
     result_file.write(json.dumps(result_struct, indent=4, cls = customEnc))
     result_file.close()
 
     return 0
-
-def process_results(folder, result_struct, i, participant):
-    result_struct[participant] = list()
-
-    print("################################################################")
-    print("### Evaluation of participant {} ({} of {})".format(participant, i + 1, len(os.listdir(folder))))
-    print("################################################################")
-
-    input_file     = None
-    brain_module_1 = None
-    brain_module_2 = None
-
-    if os.path.exists(os.path.join(folder, participant, "input.txt")):
-        input_file = os.path.join(folder, participant, "input.txt")
-    else:
-        print("### - Could not find input file")
-    if os.path.exists(os.path.join(folder, participant, "Brain_1.py")):
-        brain_module_1 = importlib.import_module(folder + '.' + participant + ".Brain_1")
-    else:
-        print("### - Could not find brain module 1")
-    if os.path.exists(os.path.join(folder, participant, "Brain_2.py")):
-        brain_module_2 = importlib.import_module(folder + '.' + participant + ".Brain_2")
-    else:
-        print("### - Could not find brain module 2")
-
-    print("################################################################")
-
-    result_struct[participant].append(test_case("t1", 1, "simple", None, input_file))
-    time.sleep(2)
-    result_struct[participant].append(test_case("t2", 1, "advanced", brain_module_1, None))
-    time.sleep(2)
-    result_struct[participant].append(test_case("t3", 1, "advanced", brain_module_2, None))
-    time.sleep(2)
-    result_struct[participant].append(test_case("t4", 2, "advanced", brain_module_2, None))
-    time.sleep(2)
-    result_struct[participant].append(test_case("t5", 3, "advanced", brain_module_2, None))
-    time.sleep(2)
-    result_struct[participant].append(test_case("t6", 4, "advanced", brain_module_2, None))
-    time.sleep(2)
-    result_struct[participant].append(test_case("t7", 5, "advanced", brain_module_2, None))
-    time.sleep(2)
-    return
 
 def test_case(test_name, map_idx, mode, brain_module, infile):
     test_data = dict()
@@ -96,21 +91,38 @@ def test_case(test_name, map_idx, mode, brain_module, infile):
 
     print("### Test {}: Map {} - Mode {}".format(test_name, test_data["map"], test_data["mode"]))
 
-    if test_data["brain"] is not None:
-        res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
-        test_data["complete"] = res_win is True
-        test_data["time"] = "{:.03f}".format(res_time / 1000.0)
-        test_data["dist"] = "{:.1f}".format(res_dist)
-        test_data["ckpt"] = list()
-        for k, v in res_ckpt.items():
-            test_data["ckpt"].append({
-                "name" : k,
-                "time" : "{:.03f}".format(v["time"] / 1000.0),
-                "dist" : "{:.1f}".format(v["distance"]),
-            })
-        print("### - Done")
-    else:
-        print("### - Skipped")
+    if test_data["mode"] == "simple":
+        if test_data["infile"] is not None:
+            res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
+            test_data["complete"] = res_win is True
+            test_data["time"] = "{:.03f}".format(res_time / 1000.0)
+            test_data["dist"] = "{:.1f}".format(res_dist)
+            test_data["ckpt"] = list()
+            for k, v in res_ckpt.items():
+                test_data["ckpt"].append({
+                    "name" : k,
+                    "time" : "{:.03f}".format(v["time"] / 1000.0),
+                    "dist" : "{:.1f}".format(v["distance"]),
+                })
+            print("### - Done")
+        else:
+            print("### - Skipped")
+    elif test_data["mode"] == "advanced":
+        if test_data["brain"] is not None:
+            res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
+            test_data["complete"] = res_win is True
+            test_data["time"] = "{:.03f}".format(res_time / 1000.0)
+            test_data["dist"] = "{:.1f}".format(res_dist)
+            test_data["ckpt"] = list()
+            for k, v in res_ckpt.items():
+                test_data["ckpt"].append({
+                    "name" : k,
+                    "time" : "{:.03f}".format(v["time"] / 1000.0),
+                    "dist" : "{:.1f}".format(v["distance"]),
+                })
+            print("### - Done")
+        else:
+            print("### - Skipped")
     
     return test_data
 
@@ -142,7 +154,11 @@ def run_game(auto, map_idx, brain_module, infile = ''):
         return (None, None, None, None)
 
     stdout = sys.stdout
-    dev_null = open('nul', 'w')
+    if platform.system() == 'Windows':
+        dev_null = open('nul', 'w')
+    else:
+        dev_null = open('/dev/null', 'w')
+    
     sys.stdout = dev_null
 
     brain = brain_module.Brain(database) if auto == "advanced" else TimeEventBrain(database, infile)
