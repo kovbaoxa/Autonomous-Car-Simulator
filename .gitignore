@@ -7,3 +7,7 @@ gym_autonmscar.egg-info/*
 # Automatic control wrap data
 input.txt
 output.txt
+
+# Secret
+results
+results.txt
