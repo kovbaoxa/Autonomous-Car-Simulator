@@ -5,6 +5,7 @@ import importlib
 import os
 import threading
 import time
+import platform
 import pygame
 import sys
 
@@ -136,7 +137,11 @@ def run_game(auto, map_idx, brain_module, infile = ''):
         return (None, None, None, None)
 
     stdout = sys.stdout
-    dev_null = open('/dev/null', 'w')
+    if platform.system() == 'Windows':
+        dev_null = open('nul', 'w')
+    else:
+        dev_null = open('/dev/null', 'w')
+    
     sys.stdout = dev_null
 
     brain = brain_module.Brain(database) if auto == "advanced" else TimeEventBrain(database, infile)
