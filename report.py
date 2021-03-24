@@ -11,7 +11,7 @@ import sys
 from json import JSONEncoder
 from src.TimeEventBrain import TimeEventBrain
 from src.Control import Control
-from src.Tracks import Map0, Map1, Map2, Map3
+from src.Tracks import Map0, Map1, Map2, Map3, Map4, Map5
 from src.Database import Database
 from src.Game import Game
 from src.LiDAR import LiDAR
@@ -55,194 +55,65 @@ def main(folder):
 
         print("################################################################")
 
-        ################################################################
-        ### test 1
-        ################################################################
-        test_data = dict()
-        ### test info
-        test_data["map"]    = 1
-        test_data["mode"]   = "simple"
-        test_data["brain"]  = None
-        test_data["infile"] = input_file
-        ### test results
-        test_data["complete"] = False # win condition status
-        test_data["time"]     = None  # total time
-        test_data["dist"]     = None  # total distance
-        test_data["ckpt"]     = None  # checkpoints
-
-        print("### Test 1 : Map {} - Mode {}".format(test_data["map"], test_data["mode"]))
-
-        if test_data["infile"] is not None:
-            res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
-            test_data["complete"] = res_win is True
-            test_data["time"] = "{:.03f}".format(res_time / 1000.0)
-            test_data["dist"] = "{:.1f}".format(res_dist)
-            test_data["ckpt"] = list()
-            for k, v in res_ckpt.items():
-                test_data["ckpt"].append({
-                    "name" : k,
-                    "time" : "{:.03f}".format(v["time"] / 1000.0),
-                    "dist" : "{:.1f}".format(v["distance"]),
-                })
-            print("### - Done")
-        else:
-            print("### - Skipped")
-        
-        result_struct[participant].append(test_data)
+        result_struct[participant].append(test_case("t1", 1, "simple", None, input_file))
         time.sleep(2)
-        ################################################################
-        ### test 2
-        ################################################################
-        test_data = dict()
-        ### test info
-        test_data["map"]    = 1
-        test_data["mode"]   = "advanced"
-        test_data["brain"]  = brain_module_1
-        test_data["infile"] = None
-        ### test results
-        test_data["complete"] = False # win condition status
-        test_data["time"]     = None  # total time
-        test_data["dist"]     = None  # total distance
-        test_data["ckpt"]     = None  # checkpoints
-
-        print("### Test 2 : Map {} - Mode {}".format(test_data["map"], test_data["mode"]))
-
-        if test_data["brain"] is not None:
-            res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
-            test_data["complete"] = res_win is True
-            test_data["time"] = "{:.03f}".format(res_time / 1000.0)
-            test_data["dist"] = "{:.1f}".format(res_dist)
-            test_data["ckpt"] = list()
-            for k, v in res_ckpt.items():
-                test_data["ckpt"].append({
-                    "name" : k,
-                    "time" : "{:.03f}".format(v["time"] / 1000.0),
-                    "dist" : "{:.1f}".format(v["distance"]),
-                })
-            print("### - Done")
-        else:
-            print("### - Skipped")
-        
-        result_struct[participant].append(test_data)
+        result_struct[participant].append(test_case("t2", 1, "advanced", brain_module_1, None))
         time.sleep(2)
-        ################################################################
-        ### test 3
-        ################################################################
-        test_data = dict()
-        ### test info
-        test_data["map"]    = 1
-        test_data["mode"]   = "advanced"
-        test_data["brain"]  = brain_module_2
-        test_data["infile"] = None
-        ### test results
-        test_data["complete"] = False # win condition status
-        test_data["time"]     = None  # total time
-        test_data["dist"]     = None  # total distance
-        test_data["ckpt"]     = None  # checkpoints
-
-        print("### Test 3 : Map {} - Mode {}".format(test_data["map"], test_data["mode"]))
-
-        if test_data["brain"] is not None:
-            res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
-            test_data["complete"] = res_win is True
-            test_data["time"] = "{:.03f}".format(res_time / 1000.0)
-            test_data["dist"] = "{:.1f}".format(res_dist)
-            test_data["ckpt"] = list()
-            for k, v in res_ckpt.items():
-                test_data["ckpt"].append({
-                    "name" : k,
-                    "time" : "{:.03f}".format(v["time"] / 1000.0),
-                    "dist" : "{:.1f}".format(v["distance"]),
-                })
-            print("### - Done")
-        else:
-            print("### - Skipped")
-        
-        result_struct[participant].append(test_data)
+        result_struct[participant].append(test_case("t3", 1, "advanced", brain_module_2, None))
         time.sleep(2)
-        ################################################################
-        ### test 4
-        ################################################################
-        test_data = dict()
-        ### test info
-        test_data["map"]    = 2
-        test_data["mode"]   = "advanced"
-        test_data["brain"]  = brain_module_2
-        test_data["infile"] = None
-        ### test results
-        test_data["complete"] = False # win condition status
-        test_data["time"]     = None  # total time
-        test_data["dist"]     = None  # total distance
-        test_data["ckpt"]     = None  # checkpoints
-
-        print("### Test 4 : Map {} - Mode {}".format(test_data["map"], test_data["mode"]))
-
-        if test_data["brain"] is not None:
-            res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
-            test_data["complete"] = res_win is True
-            test_data["time"] = "{:.03f}".format(res_time / 1000.0)
-            test_data["dist"] = "{:.1f}".format(res_dist)
-            test_data["ckpt"] = list()
-            for k, v in res_ckpt.items():
-                test_data["ckpt"].append({
-                    "name" : k,
-                    "time" : "{:.03f}".format(v["time"] / 1000.0),
-                    "dist" : "{:.1f}".format(v["distance"]),
-                })
-            print("### - Done")
-        else:
-            print("### - Skipped")
-        
-        result_struct[participant].append(test_data)
+        result_struct[participant].append(test_case("t4", 2, "advanced", brain_module_2, None))
         time.sleep(2)
-        ################################################################
-        ### test 5
-        ################################################################
-        test_data = dict()
-        ### test info
-        test_data["map"]    = 3
-        test_data["mode"]   = "advanced"
-        test_data["brain"]  = brain_module_2
-        test_data["infile"] = None
-        ### test results
-        test_data["complete"] = False # win condition status
-        test_data["time"]     = None  # total time
-        test_data["dist"]     = None  # total distance
-        test_data["ckpt"]     = None  # checkpoints
-
-        print("### Test 5 : Map {} - Mode {}".format(test_data["map"], test_data["mode"]))
-
-        if test_data["brain"] is not None:
-            res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
-            test_data["complete"] = res_win is True
-            test_data["time"] = "{:.03f}".format(res_time / 1000.0)
-            test_data["dist"] = "{:.1f}".format(res_dist)
-            test_data["ckpt"] = list()
-            for k, v in res_ckpt.items():
-                test_data["ckpt"].append({
-                    "name" : k,
-                    "time" : "{:.03f}".format(v["time"] / 1000.0),
-                    "dist" : "{:.1f}".format(v["distance"]),
-                })
-            print("### - Done")
-        else:
-            print("### - Skipped")
-        
-        result_struct[participant].append(test_data)
+        result_struct[participant].append(test_case("t5", 3, "advanced", brain_module_2, None))
         time.sleep(2)
-
+        result_struct[participant].append(test_case("t6", 4, "advanced", brain_module_2, None))
+        time.sleep(2)
+        result_struct[participant].append(test_case("t7", 5, "advanced", brain_module_2, None))
+        time.sleep(2)
 
     result_file.write(json.dumps(result_struct, indent=4, cls = customEnc))
     result_file.close()
 
     return 0
 
+def test_case(test_name, map_idx, mode, brain_module, infile):
+    test_data = dict()
+    ### test info
+    test_data["map"]    = map_idx
+    test_data["mode"]   = mode
+    test_data["brain"]  = brain_module
+    test_data["infile"] = infile
+    ### test results
+    test_data["complete"] = False # win condition status
+    test_data["time"]     = None  # total time
+    test_data["dist"]     = None  # total distance
+    test_data["ckpt"]     = None  # checkpoints
+
+    print("### Test {}: Map {} - Mode {}".format(test_name, test_data["map"], test_data["mode"]))
+
+    if test_data["brain"] is not None:
+        res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
+        test_data["complete"] = res_win is True
+        test_data["time"] = "{:.03f}".format(res_time / 1000.0)
+        test_data["dist"] = "{:.1f}".format(res_dist)
+        test_data["ckpt"] = list()
+        for k, v in res_ckpt.items():
+            test_data["ckpt"].append({
+                "name" : k,
+                "time" : "{:.03f}".format(v["time"] / 1000.0),
+                "dist" : "{:.1f}".format(v["distance"]),
+            })
+        print("### - Done")
+    else:
+        print("### - Skipped")
+    
+    return test_data
+
 def run_game(auto, map_idx, brain_module, infile = ''):
     if auto not in ("simple", "advanced"):
         print("Invalid auto mode")
         return (None, None, None, None)
 
-    map_list = [Map0, Map1, Map2, Map3]
+    map_list = [Map0, Map1, Map2, Map3, Map4, Map5]
     if map_idx not in range(len(map_list)):
         print("Invalid map index")
         return (None, None, None, None)
