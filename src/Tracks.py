@@ -139,18 +139,19 @@ Map4 = (
         WallSprite((500, 350), 500, 4), # H bottom
         WallSprite((250, 300), 4, 100), # V left
         WallSprite((750, 300), 4, 100), # V right
-
     ],
     [
-        CheckpointSprite("Checkpoint 1", (175, 300), 150, 1),
-        CheckpointSprite("Checkpoint 2", (450, 175), 150, 1, True),
-        CheckpointSprite("Checkpoint 3", (825, 300), 150, 1)
     ],
     [
         FinishLineSprite((550, 425), 144, True)
     ],
     [
-        Rock('images/rock.png', (300, 425))
+        Rock('images/rock.png', (240, 350)),
+        Rock('images/rock.png', (240, 250)),
+        Rock('images/rock.png', (760, 350)),
+        Rock('images/rock.png', (760, 250)),
+        Rock('images/rock.png', (175, 300)),
+        Rock('images/rock.png', (825, 300)),
     ],
     CarSprite('images/car.png', (500, 425), 90),
     (850, 700)
@@ -158,17 +159,42 @@ Map4 = (
 
 Map5 = (
     [
+        WallSprite((300, 50), 400, 4), # H top
+        WallSprite((175, 850), 150, 4), # H bottom left
+        WallSprite((425, 850), 150, 4), # H bottom left
+        WallSprite((100, 400), 4, 700), # V left
+        WallSprite((500, 400), 4, 700), # V right
 
+        WallSprite((300, 200), 100, 4), # H top
+        WallSprite((300, 350), 100, 4), # H bottom
+        WallSprite((250, 275), 4, 150), # V left
+        WallSprite((350, 275), 4, 150), # V right
 
+        WallSprite((300, 500), 100, 4), # H top
+        WallSprite((250, 625), 4, 250), # V left
+        WallSprite((350, 625), 4, 250), # V right
     ],
     [
+        Rock('images/rock.png', (120, 200)),
+        Rock('images/rock.png', (200, 200)),
+        Rock('images/rock.png', (160, 200)),
+        Rock('images/rock.png', (140, 160)),
+        Rock('images/rock.png', (180, 230)),
+        Rock('images/rock.png', (230, 210)),
 
+        Rock('images/rock.png', (480, 350)),
+        Rock('images/rock.png', (460, 320)),
+
+        Rock('images/rock.png', (250, 500)),
+        Rock('images/rock.png', (350, 500)),
+
+        Rock('images/rock.png', (400, 250)),
     ],
     [
-
+        FinishLineSprite((425, 730), 145)
     ],
     [
     ],
-    CarSprite('images/car.png', (500, 425), 90),
-    (850, 700)
+    CarSprite('images/car.png', (175, 750)),
+    (910, 700)
 )
