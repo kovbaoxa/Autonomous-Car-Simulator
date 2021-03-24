@@ -175,6 +175,11 @@ Map5 = (
         WallSprite((350, 625), 4, 250), # V right
     ],
     [
+    ],
+    [
+        FinishLineSprite((425, 730), 145)
+    ],
+    [
         Rock('images/rock.png', (120, 200)),
         Rock('images/rock.png', (200, 200)),
         Rock('images/rock.png', (160, 200)),
@@ -188,12 +193,7 @@ Map5 = (
         Rock('images/rock.png', (250, 500)),
         Rock('images/rock.png', (350, 500)),
 
-        Rock('images/rock.png', (400, 250)),
-    ],
-    [
-        FinishLineSprite((425, 730), 145)
-    ],
-    [
+        Rock('images/rock.png', (400, 250))
     ],
     CarSprite('images/car.png', (175, 750)),
     (910, 700)
