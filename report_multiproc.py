@@ -90,6 +90,7 @@ def run_game(auto, map_idx, brain_module, infile = ''):
 def run_test(test_name, map_idx, mode, submission_dir_path, participant, module_name, infile, test_results_queue):
     test_data = dict()
     ### test info
+    test_data["name"]   = test_name
     test_data["map"]    = map_idx
     test_data["mode"]   = mode
     test_data["brain"]  = load_brain_module(submission_dir_path, participant, module_name)
@@ -166,7 +167,7 @@ def main(submission_dir_path, evaluation_dir_path):
         print("################################################################")
         print("### Evaluation of participant {} ({} of {})".format(participant, i + 1, len(os.listdir(submission_dir_path))))
         print("################################################################")
-        evaluation_file_path = os.path.join(evaluation_dir_path, participant + ".txt")
+        evaluation_file_path = os.path.join(evaluation_dir_path, participant + ".json")
         test_results = run_tests(submission_dir_path, participant)
         log(test_results, evaluation_file_path)
     return 0
