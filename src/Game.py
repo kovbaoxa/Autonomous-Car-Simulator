@@ -19,7 +19,7 @@ MAX_FRAME_DURATION = 0.5
 # default simulation time
 DFT_SIM_DELTA_TIME = 0.0333
 # max game duration (in ms)
-MAX_GAME_DURATION  = 100000.0
+MAX_GAME_DURATION  = 50000.0
 
 class Game:
     def __init__(self, walls, checkpoints, finish_line, rocks, car, database,
