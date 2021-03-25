@@ -177,7 +177,7 @@ Map5 = (
     [
     ],
     [
-        FinishLineSprite((425, 730), 145)
+        FinishLineSprite((425, 220), 145)
     ],
     [
         Rock('images/rock.png', (120, 200)),
@@ -186,14 +186,11 @@ Map5 = (
         Rock('images/rock.png', (140, 160)),
         Rock('images/rock.png', (180, 230)),
         Rock('images/rock.png', (230, 210)),
-
-        Rock('images/rock.png', (480, 350)),
-        Rock('images/rock.png', (460, 320)),
-
+        Rock('images/rock.png', (480, 650)),
+        Rock('images/rock.png', (460, 620)),
         Rock('images/rock.png', (250, 500)),
         Rock('images/rock.png', (350, 500)),
-
-        Rock('images/rock.png', (400, 250))
+        Rock('images/rock.png', (375, 650)),
     ],
     CarSprite('images/car.png', (175, 750)),
     (910, 700)
