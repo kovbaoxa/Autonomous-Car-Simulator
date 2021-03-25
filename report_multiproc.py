@@ -121,9 +121,9 @@ def run_test(test_name, map_idx, mode, submission_dir_path, participant, module_
                     "time" : "{:.03f}".format(v["time"] / 1000.0),
                     "dist" : "{:.1f}".format(v["distance"]),
                 })
-            print("### - Done")
+            print("### - {} done".format(test_name))
         else:
-            print("### - Skipped")
+            print("### - {} skipped".format(test_name))
     elif test_data["mode"] == "advanced":
         if test_data["brain"] is not None:
             res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
@@ -139,7 +139,7 @@ def run_test(test_name, map_idx, mode, submission_dir_path, participant, module_
                 })
             print("### - {} done".format(test_name))
         else:
-            print("### - Skipped")
+            print("### - {} skipped".format(test_name))
     
     test_results_json = json.dumps(test_data, indent=4, cls=customEnc)
     test_results_queue.put(test_results_json)
