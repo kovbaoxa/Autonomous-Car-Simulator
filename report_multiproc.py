@@ -6,6 +6,7 @@ import os
 import threading
 import time
 import pygame
+import platform
 import sys
 import multiprocessing
 
@@ -70,8 +71,12 @@ def run_game(auto, map_idx, brain_module, infile = ''):
         print("No brain module to run evaluation")
         return (None, None, None, None)
 
+    ### suppress stdout from game brain
     stdout = sys.stdout
-    dev_null = open('nul', 'w')
+    if platform.system() == 'Windows':
+        dev_null = open('nul', 'w')
+    else:
+        dev_null = open('/dev/null', 'w')
     sys.stdout = dev_null
 
     brain = brain_module.Brain(database) if auto == "advanced" else TimeEventBrain(database, infile)
@@ -103,21 +108,38 @@ def run_test(test_name, map_idx, mode, submission_dir_path, participant, module_
 
     print("### Test {}: Map {} - Mode {}".format(test_name, test_data["map"], test_data["mode"]))
 
-    if test_data["brain"] is not None:
-        res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
-        test_data["complete"] = res_win is True
-        test_data["time"] = "{:.03f}".format(res_time / 1000.0)
-        test_data["dist"] = "{:.1f}".format(res_dist)
-        test_data["ckpt"] = list()
-        for k, v in res_ckpt.items():
-            test_data["ckpt"].append({
-                "name" : k,
-                "time" : "{:.03f}".format(v["time"] / 1000.0),
-                "dist" : "{:.1f}".format(v["distance"]),
-            })
-        print("### - Done")
-    else:
-        print("### - Skipped")
+    if test_data["mode"] == "simple":
+        if test_data["infile"] is not None:
+            res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
+            test_data["complete"] = res_win is True
+            test_data["time"] = "{:.03f}".format(res_time / 1000.0)
+            test_data["dist"] = "{:.1f}".format(res_dist)
+            test_data["ckpt"] = list()
+            for k, v in res_ckpt.items():
+                test_data["ckpt"].append({
+                    "name" : k,
+                    "time" : "{:.03f}".format(v["time"] / 1000.0),
+                    "dist" : "{:.1f}".format(v["distance"]),
+                })
+            print("### - Done")
+        else:
+            print("### - Skipped")
+    elif test_data["mode"] == "advanced":
+        if test_data["brain"] is not None:
+            res_win, res_time, res_dist, res_ckpt = run_game(test_data["mode"], test_data["map"], test_data["brain"], test_data["infile"])
+            test_data["complete"] = res_win is True
+            test_data["time"] = "{:.03f}".format(res_time / 1000.0)
+            test_data["dist"] = "{:.1f}".format(res_dist)
+            test_data["ckpt"] = list()
+            for k, v in res_ckpt.items():
+                test_data["ckpt"].append({
+                    "name" : k,
+                    "time" : "{:.03f}".format(v["time"] / 1000.0),
+                    "dist" : "{:.1f}".format(v["distance"]),
+                })
+            print("### - {} done".format(test_name))
+        else:
+            print("### - Skipped")
     
     test_results_json = json.dumps(test_data, indent=4, cls=customEnc)
     test_results_queue.put(test_results_json)
@@ -162,6 +184,9 @@ def log(test_results, evaluation_file_path):
 def main(submission_dir_path, evaluation_dir_path):
     sys.path.insert(0, submission_dir_path)
     participants = enumerate(sorted(os.listdir(submission_dir_path)))
+
+    if not os.path.exists(evaluation_dir_path):
+        os.mkdir(evaluation_dir_path)
 
     for i, participant in participants:
         print("################################################################")
