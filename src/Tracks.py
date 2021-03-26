@@ -164,15 +164,18 @@ Map5 = (
         WallSprite((425, 850), 150, 4), # H bottom left
         WallSprite((100, 400), 4, 700), # V left
         WallSprite((500, 400), 4, 700), # V right
-
+        #
         WallSprite((300, 200), 100, 4), # H top
         WallSprite((300, 350), 100, 4), # H bottom
         WallSprite((250, 275), 4, 150), # V left
         WallSprite((350, 275), 4, 150), # V right
-
+        #
         WallSprite((300, 500), 100, 4), # H top
         WallSprite((250, 625), 4, 250), # V left
         WallSprite((350, 625), 4, 250), # V right
+        #
+        WallSprite((425, 750), 150, 4), # H complete bottom right
+        WallSprite((175, 750), 150, 4), # H complete bottom left
     ],
     [
     ],
@@ -186,12 +189,17 @@ Map5 = (
         Rock('images/rock.png', (140, 160)),
         Rock('images/rock.png', (180, 230)),
         Rock('images/rock.png', (230, 210)),
+        #
         Rock('images/rock.png', (480, 650)),
         Rock('images/rock.png', (460, 620)),
-        Rock('images/rock.png', (250, 500)),
-        Rock('images/rock.png', (350, 500)),
-        Rock('images/rock.png', (375, 650)),
+        #
+        Rock('images/rock.png', (250, 480)),
+        Rock('images/rock.png', (310, 475)),
+        Rock('images/rock.png', (280, 390)),
+        Rock('images/rock.png', (340, 380)),
+        #
+        Rock('images/rock.png', (375, 650)),    
     ],
-    CarSprite('images/car.png', (175, 750)),
+    CarSprite('images/car.png', (175, 700)),
     (910, 700)
 )
