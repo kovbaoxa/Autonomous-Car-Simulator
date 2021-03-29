@@ -141,6 +141,9 @@ Map4 = (
         WallSprite((750, 300), 4, 100), # V right
     ],
     [
+        CheckpointSprite("Checkpoint 1", (175, 300), 150, 1),
+        CheckpointSprite("Checkpoint 2", (450, 175), 150, 1, True),
+        CheckpointSprite("Checkpoint 3", (825, 300), 150, 1)
     ],
     [
         FinishLineSprite((550, 425), 144, True)
@@ -178,6 +181,7 @@ Map5 = (
         WallSprite((175, 750), 150, 4), # H complete bottom left
     ],
     [
+        CheckpointSprite("Checkpoint 1", (300, 425), 150, 1, True)
     ],
     [
         FinishLineSprite((425, 220), 145)
@@ -193,12 +197,12 @@ Map5 = (
         Rock('images/rock.png', (480, 650)),
         Rock('images/rock.png', (460, 620)),
         #
-        Rock('images/rock.png', (250, 480)),
-        Rock('images/rock.png', (310, 475)),
+        Rock('images/rock.png', (250, 500)),
+        Rock('images/rock.png', (350, 500)),
         Rock('images/rock.png', (280, 390)),
-        Rock('images/rock.png', (340, 380)),
+        Rock('images/rock.png', (475, 380)),
         #
-        Rock('images/rock.png', (375, 650)),    
+        Rock('images/rock.png', (375, 650)),
     ],
     CarSprite('images/car.png', (175, 700)),
     (910, 700)
